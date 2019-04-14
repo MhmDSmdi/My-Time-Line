@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_app_bar_search"
+        android:title="Search"
+        android:icon="@drawable/ic_search_black_24dp"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/menu_app_bar_capture_image"
+        android:title="Take Image"
+        app:showAsAction="withText">
+        <menu>
+            <item
+                android:id="@+id/menu_app_bar_capture_image_camera"
+                android:title="Camera"
+                app:showAsAction="withText"/>
+            <item
+                android:id="@+id/menu_app_bar_capture_image_gallery"
+                android:title="Gallery"
+                app:showAsAction="withText"/>
+        </menu>
+    </item>
+
+</menu>

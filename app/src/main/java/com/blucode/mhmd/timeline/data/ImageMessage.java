@@ -1,23 +1,24 @@
 package com.blucode.mhmd.timeline.data;
 
-import java.net.URI;
+import android.net.Uri;
+
 import java.util.Date;
 
 public class ImageMessage {
-    private URI imageURI;
+    private Uri imageAddress;
     private Date time;
 
-    public ImageMessage(URI imageURI, Date time) {
-        this.imageURI = imageURI;
+    public ImageMessage(Uri imageAddress, Date time) {
         this.time = time;
+        this.imageAddress = imageAddress;
     }
 
-    public URI getImageURI() {
-        return imageURI;
+    public Uri getImageAddress() {
+        return imageAddress;
     }
 
-    public void setImageURI(URI imageURI) {
-        this.imageURI = imageURI;
+    public void setImageAddress(Uri imageAddress) {
+        this.imageAddress = imageAddress;
     }
 
     public Date getTime() {

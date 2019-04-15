@@ -1,6 +1,7 @@
 package com.blucode.mhmd.timeline.ui;
 
 import android.Manifest;
+import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -23,9 +24,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -33,9 +36,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.blucode.mhmd.timeline.R;
+import com.blucode.mhmd.timeline.adapter.ShareContentAdapter;
+import com.blucode.mhmd.timeline.data.AlbumMessage;
+import com.blucode.mhmd.timeline.data.ImageMessage;
 import com.blucode.mhmd.timeline.data.TextMessage;
 import com.blucode.mhmd.timeline.data.VoiceMessage;
 import com.blucode.mhmd.timeline.util.TimerRecording;
+import com.bumptech.glide.Glide;
 
 import java.io.File;
 import java.io.IOException;
@@ -60,7 +67,10 @@ public class ShareMessageActivity extends AppCompatActivity {
     private ShareContentAdapter adapter;
     private List<Object> items;
     private long[] mVibratePattern = new long[]{0,30};
-    static final int REQUEST_IMAGE_CAPTURE = 101;
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+    static final int REQUEST_IMAGES_PICKER = 2;
+    private ArrayList<String> imagesEncodedList;
+    private String imageEncoded;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -78,33 +88,33 @@ public class ShareMessageActivity extends AppCompatActivity {
         btnCamera = findViewById(R.id.img_home_camera);
         btnVoice = findViewById(R.id.img_home_voice);
         btnAttach = findViewById(R.id.img_home_attach);
-        if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
-            btnCamera.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-                        File photoFile = null;
-                        try {
-                            photoFile = createImageFile();
-                        } catch (IOException ignored) {
-                        }
-                        if (photoFile != null) {
-                            Uri photoURI = FileProvider.getUriForFile(ShareMessageActivity.this, "com.example.android.fileproviderr", photoFile);
-                            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-                        }
+
+        btnCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                    File photoFile = null;
+                    try {
+                        photoFile = createImageFile();
+                    } catch (IOException ignored) {
+                    }
+                    if (photoFile != null) {
+                        Uri photoURI = FileProvider.getUriForFile(ShareMessageActivity.this, "com.mhmd.android.fileprovider", photoFile);
+                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                     }
                 }
-            });
-        } else {
-            btnCamera.setEnabled(false);
-        }
-
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+            }
+        });
         btnAttach.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent,"Select Picture"), REQUEST_IMAGES_PICKER);
             }
         });
 
@@ -137,17 +147,17 @@ public class ShareMessageActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 TextMessage message = new TextMessage(messageEditText.getText().toString(), new Date());
-                items.add(message);
+                items.add(0, message);
                 messageEditText.setText("");
-                adapter.notifyItemInserted(items.size() - 1);
-                Intent sendIntent = new Intent();
-                sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, messageEditText.getText().toString().trim());
-                sendIntent.setType("text/plain");
-                // Verify that the intent will resolve to an activity
-                if (sendIntent.resolveActivity(getPackageManager()) != null) {
-                    startActivity(sendIntent);
-                }
+                adapter.notifyItemInserted(0);
+//                Intent sendIntent = new Intent();
+//                sendIntent.setAction(Intent.ACTION_SEND);
+//                sendIntent.putExtra(Intent.EXTRA_TEXT, messageEditText.getText().toString().trim());
+//                sendIntent.setType("text/plain");
+//                // Verify that the intent will resolve to an activity
+//                if (sendIntent.resolveActivity(getPackageManager()) != null) {
+//                    startActivity(sendIntent);
+//                }
             }
         });
 
@@ -178,9 +188,9 @@ public class ShareMessageActivity extends AppCompatActivity {
                         stopRecording();
                         VoiceMessage voiceMessage = new VoiceMessage(messageEditText.getText().toString(), new Date(), voiceOutputFile);
                         voiceMessage.setDuration(timerRecording.getTick());
-                        items.add(voiceMessage);
+                        items.add(0, voiceMessage);
                         timerRecording.cancelTimer();
-                        adapter.notifyItemInserted(items.size() - 1);
+                        adapter.notifyItemInserted(0);
                     return true;
                }
                return false;
@@ -216,32 +226,49 @@ public class ShareMessageActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case REQUEST_IMAGE_CAPTURE:
-                  if (data != null) {
-                      currentPhotoPath = getRealPathFromURI(this, data.getData());
-                      Toast.makeText(this, currentPhotoPath, Toast.LENGTH_LONG).show();
-//                    Glide.with(getApplicationContext())
-//                            .load(data.getData())
-//                            .into(imageView_holder);
-                  } else {
-                      Toast.makeText(this, "Data is Null", Toast.LENGTH_LONG).show();
-                  }
+                    ImageMessage imageMessage = new ImageMessage(Uri.fromFile(new File(currentPhotoPath)), null);
+                    items.add(0, imageMessage);
+                    adapter.notifyItemInserted(0);
+                    break;
+
+                case REQUEST_IMAGES_PICKER:
+                    String[] filePathColumn = { MediaStore.Images.Media.DATA };
+                    List<Uri> mArrayUri = new ArrayList<Uri>();
+                    if(data.getData()!=null){
+                        ImageMessage singleImageMessage = new ImageMessage(data.getData(), null);
+                        items.add(0, singleImageMessage);
+                        adapter.notifyItemInserted(0);
+
+                    } else if (data.getClipData() != null) {
+                        ClipData mClipData = data.getClipData();
+                        for (int i = 0; i < mClipData.getItemCount(); i++) {
+                            ClipData.Item item = mClipData.getItemAt(i);
+                            Uri uri = item.getUri();
+                            mArrayUri.add(uri);
+                        }
+                        AlbumMessage albumMessage = new AlbumMessage();
+                        albumMessage.setImagesListAddress(mArrayUri);
+                        items.add(0, albumMessage);
+                        adapter.notifyItemInserted(0);
+                    }
+
                     break;
             }
         }
     }
 
-    private void galleryAddPic() {
-        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-        File f = new File(currentPhotoPath);
-        Uri contentUri = Uri.fromFile(f);
-        mediaScanIntent.setData(contentUri);
-        this.sendBroadcast(mediaScanIntent);
-    }
+//    private void galleryAddPic() {
+//        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+//        File f = new File(currentPhotoPath);
+//        Uri contentUri = Uri.fromFile(f);
+//        mediaScanIntent.setData(contentUri);
+//        this.sendBroadcast(mediaScanIntent);
+//    }
 
     public static String getRealPathFromURI(Context context, Uri contentUri) {
         Cursor cursor = null;
         try {
-            String[] proj = { MediaStore.Images.Media.DATA };
+            String[] proj = { MediaStore.Images.Media.DATA};
             cursor = context.getContentResolver().query(contentUri,  proj, null, null, null);
             int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
             cursor.moveToFirst();

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="width_image_message">150dp</dimen>
+    <dimen name="height_image_message">170dp</dimen>
+
+    <dimen name="width_image_album_message">85dp</dimen>
+    <dimen name="height_image_album_message">100dp</dimen>
+</resources>

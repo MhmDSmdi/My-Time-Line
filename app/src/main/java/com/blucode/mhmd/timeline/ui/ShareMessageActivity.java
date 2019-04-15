@@ -69,8 +69,6 @@ public class ShareMessageActivity extends AppCompatActivity {
     private long[] mVibratePattern = new long[]{0,30};
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int REQUEST_IMAGES_PICKER = 2;
-    private ArrayList<String> imagesEncodedList;
-    private String imageEncoded;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -150,6 +148,7 @@ public class ShareMessageActivity extends AppCompatActivity {
                 items.add(0, message);
                 messageEditText.setText("");
                 adapter.notifyItemInserted(0);
+                recyclerView.smoothScrollToPosition(0);
 //                Intent sendIntent = new Intent();
 //                sendIntent.setAction(Intent.ACTION_SEND);
 //                sendIntent.putExtra(Intent.EXTRA_TEXT, messageEditText.getText().toString().trim());
@@ -189,6 +188,7 @@ public class ShareMessageActivity extends AppCompatActivity {
                         VoiceMessage voiceMessage = new VoiceMessage(messageEditText.getText().toString(), new Date(), voiceOutputFile);
                         voiceMessage.setDuration(timerRecording.getTick());
                         items.add(0, voiceMessage);
+                        recyclerView.smoothScrollToPosition(0);
                         timerRecording.cancelTimer();
                         adapter.notifyItemInserted(0);
                     return true;
@@ -228,7 +228,9 @@ public class ShareMessageActivity extends AppCompatActivity {
                 case REQUEST_IMAGE_CAPTURE:
                     ImageMessage imageMessage = new ImageMessage(Uri.fromFile(new File(currentPhotoPath)), null);
                     items.add(0, imageMessage);
+                    recyclerView.smoothScrollToPosition(0);
                     adapter.notifyItemInserted(0);
+                    galleryAddPic();
                     break;
 
                 case REQUEST_IMAGES_PICKER:
@@ -238,6 +240,7 @@ public class ShareMessageActivity extends AppCompatActivity {
                         ImageMessage singleImageMessage = new ImageMessage(data.getData(), null);
                         items.add(0, singleImageMessage);
                         adapter.notifyItemInserted(0);
+                        recyclerView.smoothScrollToPosition(0);
 
                     } else if (data.getClipData() != null) {
                         ClipData mClipData = data.getClipData();
@@ -250,6 +253,7 @@ public class ShareMessageActivity extends AppCompatActivity {
                         albumMessage.setImagesListAddress(mArrayUri);
                         items.add(0, albumMessage);
                         adapter.notifyItemInserted(0);
+                        recyclerView.smoothScrollToPosition(0);
                     }
 
                     break;
@@ -257,13 +261,13 @@ public class ShareMessageActivity extends AppCompatActivity {
         }
     }
 
-//    private void galleryAddPic() {
-//        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-//        File f = new File(currentPhotoPath);
-//        Uri contentUri = Uri.fromFile(f);
-//        mediaScanIntent.setData(contentUri);
-//        this.sendBroadcast(mediaScanIntent);
-//    }
+    private void galleryAddPic() {
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        File f = new File(currentPhotoPath);
+        Uri contentUri = Uri.fromFile(f);
+        mediaScanIntent.setData(contentUri);
+        this.sendBroadcast(mediaScanIntent);
+    }
 
     public static String getRealPathFromURI(Context context, Uri contentUri) {
         Cursor cursor = null;

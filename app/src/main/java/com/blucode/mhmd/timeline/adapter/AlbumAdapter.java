@@ -1,6 +1,7 @@
 package com.blucode.mhmd.timeline.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -10,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.blucode.mhmd.timeline.R;
+import com.blucode.mhmd.timeline.ui.ImagePreviewActivity;
+import com.blucode.mhmd.timeline.util.AppConst;
 import com.bumptech.glide.Glide;
 
 import java.util.List;
@@ -34,6 +37,14 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ImageViewHol
         final Uri imagePath = imageAddresses.get(position);
 //        Glide.with(mContext).load(R.drawable.placeholder).into(holder.drawable);
         Glide.with(mContext).load(imagePath).into(holder.drawable);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, ImagePreviewActivity.class);
+                intent.putExtra(AppConst.EXTRA_IMAGE_URI, imagePath.toString());
+                mContext.startActivity(intent);
+            }
+        });
     }
 
     @Override

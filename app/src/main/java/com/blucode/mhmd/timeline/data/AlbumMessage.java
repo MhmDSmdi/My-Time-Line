@@ -7,8 +7,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import io.objectbox.annotation.Entity;
+import io.objectbox.annotation.Id;
+
+@Entity
 public class AlbumMessage {
 
+    @Id
+    public long id;
     private List<Uri> imagesListAddress;
     private Date time;
 
@@ -30,5 +36,13 @@ public class AlbumMessage {
 
     public void setTime(Date time) {
         this.time = time;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 }

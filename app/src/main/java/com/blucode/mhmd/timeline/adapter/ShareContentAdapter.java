@@ -20,10 +20,12 @@ import com.blucode.mhmd.timeline.data.ImageMessage;
 import com.blucode.mhmd.timeline.data.TextMessage;
 import com.blucode.mhmd.timeline.data.VoiceMessage;
 import com.blucode.mhmd.timeline.ui.AlertRemoveDialog;
+import com.blucode.mhmd.timeline.ui.ImagePreviewActivity;
 import com.blucode.mhmd.timeline.ui.view_holder.AlbumMessageViewHolder;
 import com.blucode.mhmd.timeline.ui.view_holder.ImageMessageViewHolder;
 import com.blucode.mhmd.timeline.ui.view_holder.TextMessageViewHolder;
 import com.blucode.mhmd.timeline.ui.view_holder.VoiceMessageViewHolder;
+import com.blucode.mhmd.timeline.util.AppConst;
 import com.bumptech.glide.Glide;
 
 import java.text.SimpleDateFormat;
@@ -135,12 +137,20 @@ public class ShareContentAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 final ImageMessage imageMessage = (ImageMessage) itemList.get(position);
                 ImageMessageViewHolder imageMessageViewHolder= (ImageMessageViewHolder) (holder);
                 Glide.with(mContext).load(imageMessage.getImageAddress()).into(imageMessageViewHolder.getImg());
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(mContext, ImagePreviewActivity.class);
+                        intent.putExtra(AppConst.EXTRA_IMAGE_URI, imageMessage.getImageAddress().toString());
+                        mContext.startActivity(intent);
+                    }
+                });
                 break;
             case IMAGE_ALBUM:
                 final AlbumMessage albumMessage = (AlbumMessage) itemList.get(position);
                 AlbumMessageViewHolder albumMessageViewHolder= (AlbumMessageViewHolder) (holder);
                 RecyclerView imagesRecyclerview = albumMessageViewHolder.getImagesRecyclerview();
-                if (albumMessage.getImagesListAddress().size() % 3 != 1)
+                if (albumMessage.getImagesListAddress().size() / 3 >= 1)
                     imagesRecyclerview.setLayoutManager(new GridLayoutManager(mContext, 3));
                 else if (albumMessage.getImagesListAddress().size() % 2 == 0)
                     imagesRecyclerview.setLayoutManager(new GridLayoutManager(mContext, 2));

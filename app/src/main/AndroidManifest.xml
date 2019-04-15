@@ -24,6 +24,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.AlertRemoveDialog" android:theme="@android:style/Theme.Holo.Dialog.NoActionBar"/>
+        <activity android:name=".ui.ImagePreviewActivity"/>
 
         <provider
             android:name="android.support.v4.content.FileProvider"

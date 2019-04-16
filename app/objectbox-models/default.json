@@ -1,0 +1,124 @@
+{
+  "_note1": "KEEP THIS FILE! Check it into a version control system (VCS) like git.",
+  "_note2": "ObjectBox manages crucial IDs for your object model. See docs for details.",
+  "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
+  "entities": [
+    {
+      "id": "1:2141173421341250743",
+      "lastPropertyId": "3:1307273894012159946",
+      "name": "TextMessage",
+      "properties": [
+        {
+          "id": "1:7891828027139360647",
+          "name": "id"
+        },
+        {
+          "id": "2:30518228474562363",
+          "name": "text"
+        },
+        {
+          "id": "3:1307273894012159946",
+          "name": "time"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "2:8206576063930158965",
+      "lastPropertyId": "3:867003130200787169",
+      "name": "ImageMessage",
+      "properties": [
+        {
+          "id": "1:377452008371218723",
+          "name": "id"
+        },
+        {
+          "id": "2:6422527134514372602",
+          "name": "time"
+        },
+        {
+          "id": "3:867003130200787169",
+          "indexId": "1:8299829964281359850",
+          "name": "imageAddressId"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "3:3379592818516244633",
+      "lastPropertyId": "2:2639223491158471241",
+      "name": "AlbumMessage",
+      "properties": [
+        {
+          "id": "1:7315599172289986023",
+          "name": "id"
+        },
+        {
+          "id": "2:2639223491158471241",
+          "name": "time"
+        }
+      ],
+      "relations": [
+        {
+          "id": "1:6181449295787762287",
+          "name": "imagesListUri"
+        }
+      ]
+    },
+    {
+      "id": "4:7832377999512729685",
+      "lastPropertyId": "2:779148051927069480",
+      "name": "UriAddress",
+      "properties": [
+        {
+          "id": "1:5968600779373606447",
+          "name": "id"
+        },
+        {
+          "id": "2:779148051927069480",
+          "name": "address"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "5:6733036867177755339",
+      "lastPropertyId": "5:4015412744269954019",
+      "name": "VoiceMessage",
+      "properties": [
+        {
+          "id": "1:5655849960483490074",
+          "name": "id"
+        },
+        {
+          "id": "2:4459605103066474514",
+          "name": "bodyMessage"
+        },
+        {
+          "id": "3:6821068672203021984",
+          "name": "time"
+        },
+        {
+          "id": "4:8374735929609526641",
+          "name": "duration"
+        },
+        {
+          "id": "5:4015412744269954019",
+          "name": "path"
+        }
+      ],
+      "relations": []
+    }
+  ],
+  "lastEntityId": "5:6733036867177755339",
+  "lastIndexId": "1:8299829964281359850",
+  "lastRelationId": "1:6181449295787762287",
+  "lastSequenceId": "0:0",
+  "modelVersion": 4,
+  "modelVersionParserMinimum": 4,
+  "retiredEntityUids": [],
+  "retiredIndexUids": [],
+  "retiredPropertyUids": [],
+  "retiredRelationUids": [],
+  "version": 1
+}

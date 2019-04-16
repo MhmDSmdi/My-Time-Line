@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.blucode.mhmd.timeline.R;
+import com.blucode.mhmd.timeline.data.UriAddress;
 import com.blucode.mhmd.timeline.ui.ImagePreviewActivity;
 import com.blucode.mhmd.timeline.util.AppConst;
 import com.bumptech.glide.Glide;
@@ -19,9 +20,9 @@ import java.util.List;
 
 public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ImageViewHolder> {
     private Context mContext;
-    private List<Uri> imageAddresses;
+    private List<UriAddress> imageAddresses;
 
-    public AlbumAdapter(Context mContext, List<Uri> imageAddresses) {
+    public AlbumAdapter(Context mContext, List<UriAddress> imageAddresses) {
         this.mContext = mContext;
         this.imageAddresses = imageAddresses;
     }
@@ -34,7 +35,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ImageViewHol
 
     @Override
     public void onBindViewHolder(@NonNull ImageViewHolder holder, int position) {
-        final Uri imagePath = imageAddresses.get(position);
+        final Uri imagePath = Uri.parse(imageAddresses.get(position).getAddress());
 //        Glide.with(mContext).load(R.drawable.placeholder).into(holder.drawable);
         Glide.with(mContext).load(imagePath).into(holder.drawable);
         holder.itemView.setOnClickListener(new View.OnClickListener() {

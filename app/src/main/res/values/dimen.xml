@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="width_image_message">150dp</dimen>
-    <dimen name="height_image_message">170dp</dimen>
+    <dimen name="width_image_message">255dp</dimen>
+    <dimen name="height_image_message">255dp</dimen>
 
     <dimen name="width_image_album_message">85dp</dimen>
     <dimen name="height_image_album_message">100dp</dimen>
+
+    <dimen name="size_card_max_width">255dp</dimen>
+
+    <dimen name="margin_message_placeholder">16dp</dimen>
+    <dimen name="margin_avatar_message">6dp</dimen>
+    <dimen name="margin_messages">2dp</dimen>
+    <dimen name="height_voice_message">85dp</dimen>
+
 </resources>

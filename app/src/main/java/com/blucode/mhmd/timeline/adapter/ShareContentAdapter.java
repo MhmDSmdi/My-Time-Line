@@ -136,7 +136,7 @@ public class ShareContentAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             case IMAGE:
                 final ImageMessage imageMessage = (ImageMessage) itemList.get(position);
                 ImageMessageViewHolder imageMessageViewHolder= (ImageMessageViewHolder) (holder);
-                Glide.with(mContext).load(imageMessage.getImageAddress()).into(imageMessageViewHolder.getImg());
+                Glide.with(mContext).load(imageMessage.getUri()).into(imageMessageViewHolder.getImg());
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -150,11 +150,11 @@ public class ShareContentAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 final AlbumMessage albumMessage = (AlbumMessage) itemList.get(position);
                 AlbumMessageViewHolder albumMessageViewHolder= (AlbumMessageViewHolder) (holder);
                 RecyclerView imagesRecyclerview = albumMessageViewHolder.getImagesRecyclerview();
-                if (albumMessage.getImagesListAddress().size() / 3 >= 1)
+                if (albumMessage.getImagesListUri().size() / 3 >= 1)
                     imagesRecyclerview.setLayoutManager(new GridLayoutManager(mContext, 3));
-                else if (albumMessage.getImagesListAddress().size() % 2 == 0)
+                else if (albumMessage.getImagesListUri().size() % 2 == 0)
                     imagesRecyclerview.setLayoutManager(new GridLayoutManager(mContext, 2));
-                AlbumAdapter adapter = new AlbumAdapter(mContext, albumMessage.getImagesListAddress());
+                AlbumAdapter adapter = new AlbumAdapter(mContext, albumMessage.getImagesListUri());
                 imagesRecyclerview.setAdapter(adapter);
                 break;
             case DATE:

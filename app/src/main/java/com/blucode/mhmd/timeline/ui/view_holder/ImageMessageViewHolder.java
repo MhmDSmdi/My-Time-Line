@@ -9,11 +9,12 @@ import com.blucode.mhmd.timeline.R;
 
 public class ImageMessageViewHolder extends RecyclerView.ViewHolder {
 
-    private ImageView img;
+    private ImageView img, avatar;
 
     public ImageMessageViewHolder(@NonNull View itemView) {
         super(itemView);
         img = itemView.findViewById(R.id.img_image_message_card_drawable);
+        avatar = itemView.findViewById(R.id.img_card_image_message_bullet);
     }
 
     public ImageView getImg() {
@@ -22,5 +23,13 @@ public class ImageMessageViewHolder extends RecyclerView.ViewHolder {
 
     public void setImg(ImageView img) {
         this.img = img;
+    }
+
+    public ImageView getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(ImageView avatar) {
+        this.avatar = avatar;
     }
 }

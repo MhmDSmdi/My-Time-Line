@@ -1,9 +1,5 @@
 package com.blucode.mhmd.timeline.data;
 
-import android.net.Uri;
-
-import java.net.URI;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -15,19 +11,19 @@ public class AlbumMessage {
 
     @Id
     public long id;
-    private List<Uri> imagesListAddress;
+
+    private List<UriAddress> imagesListUri;
     private Date time;
 
     public AlbumMessage() {
-        imagesListAddress = new ArrayList<>();
     }
 
-    public List<Uri> getImagesListAddress() {
-        return imagesListAddress;
+    public void setImagesListUri(List<UriAddress> imagesListUri) {
+        this.imagesListUri = imagesListUri;
     }
 
-    public void setImagesListAddress(List<Uri> imagesListAddress) {
-        this.imagesListAddress = imagesListAddress;
+    public List<UriAddress> getImagesListUri() {
+        return imagesListUri;
     }
 
     public Date getTime() {

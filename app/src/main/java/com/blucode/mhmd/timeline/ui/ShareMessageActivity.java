@@ -15,6 +15,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.Vibrator;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -28,7 +29,6 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -40,9 +40,9 @@ import com.blucode.mhmd.timeline.adapter.ShareContentAdapter;
 import com.blucode.mhmd.timeline.data.AlbumMessage;
 import com.blucode.mhmd.timeline.data.ImageMessage;
 import com.blucode.mhmd.timeline.data.TextMessage;
+import com.blucode.mhmd.timeline.data.UriAddress;
 import com.blucode.mhmd.timeline.data.VoiceMessage;
 import com.blucode.mhmd.timeline.util.TimerRecording;
-import com.bumptech.glide.Glide;
 
 import java.io.File;
 import java.io.IOException;
@@ -83,6 +83,7 @@ public class ShareMessageActivity extends AppCompatActivity {
         getPermission();
         adapter = new ShareContentAdapter(this, items);
         recyclerView.setAdapter(adapter);
+        recyclerView.addOnScrollListener(scrollListener);
         btnCamera = findViewById(R.id.img_home_camera);
         btnVoice = findViewById(R.id.img_home_voice);
         btnAttach = findViewById(R.id.img_home_attach);
@@ -198,6 +199,21 @@ public class ShareMessageActivity extends AppCompatActivity {
        });
     }
 
+
+    RecyclerView.OnScrollListener scrollListener = new RecyclerView.OnScrollListener() {
+        @Override
+        public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+            super.onScrollStateChanged(recyclerView, newState);
+        }
+
+        @Override
+        public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+            Log.d("TEEST", "dx= " + String.valueOf(dx));
+            Log.d("TEEST", "dy= " + String.valueOf(dy));
+            super.onScrolled(recyclerView, dx, dy);
+        }
+    };
+
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
@@ -235,7 +251,7 @@ public class ShareMessageActivity extends AppCompatActivity {
 
                 case REQUEST_IMAGES_PICKER:
                     String[] filePathColumn = { MediaStore.Images.Media.DATA };
-                    List<Uri> mArrayUri = new ArrayList<Uri>();
+                    List<UriAddress> mArrayUri = new ArrayList<>();
                     if(data.getData()!=null){
                         ImageMessage singleImageMessage = new ImageMessage(data.getData(), null);
                         items.add(0, singleImageMessage);
@@ -247,10 +263,10 @@ public class ShareMessageActivity extends AppCompatActivity {
                         for (int i = 0; i < mClipData.getItemCount(); i++) {
                             ClipData.Item item = mClipData.getItemAt(i);
                             Uri uri = item.getUri();
-                            mArrayUri.add(uri);
+                            mArrayUri.add(new UriAddress(uri));
                         }
                         AlbumMessage albumMessage = new AlbumMessage();
-                        albumMessage.setImagesListAddress(mArrayUri);
+                        albumMessage.setImagesListUri(mArrayUri);
                         items.add(0, albumMessage);
                         adapter.notifyItemInserted(0);
                         recyclerView.smoothScrollToPosition(0);

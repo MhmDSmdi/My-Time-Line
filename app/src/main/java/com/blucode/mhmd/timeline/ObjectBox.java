@@ -2,6 +2,8 @@ package com.blucode.mhmd.timeline;
 
 import android.content.Context;
 
+import com.blucode.mhmd.timeline.data.MyObjectBox;
+
 import io.objectbox.BoxStore;
 
 public class ObjectBox {

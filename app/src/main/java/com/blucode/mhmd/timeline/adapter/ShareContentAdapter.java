@@ -15,18 +15,20 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.blucode.mhmd.timeline.R;
-import com.blucode.mhmd.timeline.data.AlbumMessage;
-import com.blucode.mhmd.timeline.data.ImageMessage;
-import com.blucode.mhmd.timeline.data.TextMessage;
-import com.blucode.mhmd.timeline.data.VoiceMessage;
+import com.blucode.mhmd.timeline.data.model.AlbumMessage;
+import com.blucode.mhmd.timeline.data.model.ImageMessage;
+import com.blucode.mhmd.timeline.data.model.TextMessage;
+import com.blucode.mhmd.timeline.data.model.VoiceMessage;
 import com.blucode.mhmd.timeline.ui.AlertRemoveDialog;
 import com.blucode.mhmd.timeline.ui.ImagePreviewActivity;
 import com.blucode.mhmd.timeline.ui.view_holder.AlbumMessageViewHolder;
 import com.blucode.mhmd.timeline.ui.view_holder.ImageMessageViewHolder;
 import com.blucode.mhmd.timeline.ui.view_holder.TextMessageViewHolder;
+import com.blucode.mhmd.timeline.ui.view_holder.TimeLineType;
 import com.blucode.mhmd.timeline.ui.view_holder.VoiceMessageViewHolder;
 import com.blucode.mhmd.timeline.util.AppConst;
 import com.bumptech.glide.Glide;
+import com.github.vipulasri.timelineview.TimelineView;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -53,19 +55,19 @@ public class ShareContentAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         switch (viewType) {
             case TEXT_MESSAGE:
                 View textMessageView = inflater.inflate(R.layout.card_text_message, parent, false);
-                viewHolder = new TextMessageViewHolder(textMessageView);
+                viewHolder = new TextMessageViewHolder(textMessageView, viewType);
                 break;
             case VOICE_MESSAGE:
                 View voiceMessageView = inflater.inflate(R.layout.card_voice_message, parent, false);
-                viewHolder = new VoiceMessageViewHolder(voiceMessageView);
+                viewHolder = new VoiceMessageViewHolder(voiceMessageView, viewType);
                 break;
             case IMAGE:
                 View imageMessageView = inflater.inflate(R.layout.card_image_message, parent, false);
-                viewHolder = new ImageMessageViewHolder(imageMessageView);
+                viewHolder = new ImageMessageViewHolder(imageMessageView, viewType);
                 break;
             case IMAGE_ALBUM:
                 View albumMessageView = inflater.inflate(R.layout.card_album_message, parent, false);
-                viewHolder = new AlbumMessageViewHolder(albumMessageView);
+                viewHolder = new AlbumMessageViewHolder(albumMessageView, viewType);
                 break;
             case DATE:
 
@@ -81,7 +83,16 @@ public class ShareContentAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             case TEXT_MESSAGE:
                 final TextMessage textMessage = (TextMessage) itemList.get(position);
                 TextMessageViewHolder textMessageViewHolder = (TextMessageViewHolder)(holder);
-                textMessageViewHolder.getTime().setText(dateFormat.format(textMessage.getTime()));
+                textMessageViewHolder.setTimeLineType(TimeLineType.NORMAL);
+                if (itemList.size() == 1)
+                    textMessageViewHolder.setTimeLineType(TimeLineType.ONLYONE);
+                else if (position == itemList.size() - 1)
+                    textMessageViewHolder.setTimeLineType(TimeLineType.END);
+                else if (position  == 0)
+                    textMessageViewHolder.setTimeLineType(TimeLineType.START);
+                else
+                    textMessageViewHolder.setTimeLineType(TimeLineType.NORMAL);
+//                textMessageViewHolder.getTime().setText(dateFormat.format(textMessage.getTime()));
                 textMessageViewHolder.getBodyMessage().setText(textMessage.getText());
                 holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
@@ -106,6 +117,14 @@ public class ShareContentAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             case VOICE_MESSAGE:
                 final VoiceMessage voiceMessage = (VoiceMessage) itemList.get(position);
                 VoiceMessageViewHolder voiceMessageViewHolder = (VoiceMessageViewHolder) (holder);
+                if (itemList.size() == 1)
+                    voiceMessageViewHolder .setTimeLineType(TimeLineType.ONLYONE);
+                else if (position == itemList.size() - 1)
+                    voiceMessageViewHolder.setTimeLineType(TimeLineType.END);
+                else if (position  == 0)
+                    voiceMessageViewHolder.setTimeLineType(TimeLineType.START);
+                else
+                    voiceMessageViewHolder.setTimeLineType(TimeLineType.NORMAL);
                 voiceMessageViewHolder.getTime().setText(dateFormat.format(voiceMessage.getTime()));
                 voiceMessageViewHolder.getBody().setText(voiceMessage.getBodyMessage());
                 voiceMessageViewHolder.getDuration().setText(voiceMessage.getDurationFormative());
@@ -136,6 +155,14 @@ public class ShareContentAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             case IMAGE:
                 final ImageMessage imageMessage = (ImageMessage) itemList.get(position);
                 ImageMessageViewHolder imageMessageViewHolder= (ImageMessageViewHolder) (holder);
+                if (itemList.size() == 1)
+                    imageMessageViewHolder .setTimeLineType(TimeLineType.ONLYONE);
+                else if (position == itemList.size() - 1)
+                    imageMessageViewHolder.setTimeLineType(TimeLineType.END);
+                else if (position  == 0)
+                    imageMessageViewHolder.setTimeLineType(TimeLineType.START);
+                else
+                    imageMessageViewHolder.setTimeLineType(TimeLineType.NORMAL);
                 Glide.with(mContext).load(imageMessage.getUri()).into(imageMessageViewHolder.getImg());
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -149,6 +176,14 @@ public class ShareContentAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             case IMAGE_ALBUM:
                 final AlbumMessage albumMessage = (AlbumMessage) itemList.get(position);
                 AlbumMessageViewHolder albumMessageViewHolder= (AlbumMessageViewHolder) (holder);
+                if (itemList.size() == 1)
+                    albumMessageViewHolder .setTimeLineType(TimeLineType.ONLYONE);
+                else if (position == itemList.size() - 1)
+                    albumMessageViewHolder.setTimeLineType(TimeLineType.END);
+                else if (position  == 0)
+                    albumMessageViewHolder.setTimeLineType(TimeLineType.START);
+                else
+                    albumMessageViewHolder.setTimeLineType(TimeLineType.NORMAL);
                 RecyclerView imagesRecyclerview = albumMessageViewHolder.getImagesRecyclerview();
                 if (albumMessage.getImagesListUri().size() / 3 >= 1)
                     imagesRecyclerview.setLayoutManager(new GridLayoutManager(mContext, 3));

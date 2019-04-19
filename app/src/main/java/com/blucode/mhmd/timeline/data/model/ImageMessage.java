@@ -1,4 +1,4 @@
-package com.blucode.mhmd.timeline.data;
+package com.blucode.mhmd.timeline.data.model;
 
 import android.net.Uri;
 
@@ -13,7 +13,6 @@ public class ImageMessage {
 
     @Id
     public long id;
-
     private ToOne<UriAddress> imageAddress;
     private Date time;
 

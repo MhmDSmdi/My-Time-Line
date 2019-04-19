@@ -37,11 +37,12 @@ import android.widget.Toast;
 
 import com.blucode.mhmd.timeline.R;
 import com.blucode.mhmd.timeline.adapter.ShareContentAdapter;
-import com.blucode.mhmd.timeline.data.AlbumMessage;
-import com.blucode.mhmd.timeline.data.ImageMessage;
-import com.blucode.mhmd.timeline.data.TextMessage;
-import com.blucode.mhmd.timeline.data.UriAddress;
-import com.blucode.mhmd.timeline.data.VoiceMessage;
+import com.blucode.mhmd.timeline.data.AppDataManager;
+import com.blucode.mhmd.timeline.data.model.AlbumMessage;
+import com.blucode.mhmd.timeline.data.model.ImageMessage;
+import com.blucode.mhmd.timeline.data.model.TextMessage;
+import com.blucode.mhmd.timeline.data.model.UriAddress;
+import com.blucode.mhmd.timeline.data.model.VoiceMessage;
 import com.blucode.mhmd.timeline.util.TimerRecording;
 
 import java.io.File;
@@ -51,7 +52,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class ShareMessageActivity extends AppCompatActivity {
+public class TimeLineActivity extends AppCompatActivity {
 
     private static final int MY_PERMISSIONS_REQUEST = 720;
     private ImageView btnSend, btnCamera, btnVoice, btnAttach;
@@ -66,9 +67,12 @@ public class ShareMessageActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private ShareContentAdapter adapter;
     private List<Object> items;
+    private AppDataManager dataManager;
     private long[] mVibratePattern = new long[]{0,30};
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int REQUEST_IMAGES_PICKER = 2;
+
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -80,6 +84,7 @@ public class ShareMessageActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recycler_sharedContent);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         items = new ArrayList<>();
+        dataManager = new AppDataManager();
         getPermission();
         adapter = new ShareContentAdapter(this, items);
         recyclerView.setAdapter(adapter);
@@ -99,7 +104,7 @@ public class ShareMessageActivity extends AppCompatActivity {
                     } catch (IOException ignored) {
                     }
                     if (photoFile != null) {
-                        Uri photoURI = FileProvider.getUriForFile(ShareMessageActivity.this, "com.mhmd.android.fileprovider", photoFile);
+                        Uri photoURI = FileProvider.getUriForFile(TimeLineActivity.this, "com.mhmd.android.fileprovider", photoFile);
                         takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                     }
                 }
@@ -149,6 +154,7 @@ public class ShareMessageActivity extends AppCompatActivity {
                 items.add(0, message);
                 messageEditText.setText("");
                 adapter.notifyItemInserted(0);
+                adapter.notifyItemChanged(1);
                 recyclerView.smoothScrollToPosition(0);
 //                Intent sendIntent = new Intent();
 //                sendIntent.setAction(Intent.ACTION_SEND);
@@ -192,6 +198,7 @@ public class ShareMessageActivity extends AppCompatActivity {
                         recyclerView.smoothScrollToPosition(0);
                         timerRecording.cancelTimer();
                         adapter.notifyItemInserted(0);
+                        adapter.notifyItemChanged(1);
                     return true;
                }
                return false;
@@ -246,6 +253,8 @@ public class ShareMessageActivity extends AppCompatActivity {
                     items.add(0, imageMessage);
                     recyclerView.smoothScrollToPosition(0);
                     adapter.notifyItemInserted(0);
+                    adapter.notifyItemChanged(1);
+
                     galleryAddPic();
                     break;
 
@@ -256,6 +265,7 @@ public class ShareMessageActivity extends AppCompatActivity {
                         ImageMessage singleImageMessage = new ImageMessage(data.getData(), null);
                         items.add(0, singleImageMessage);
                         adapter.notifyItemInserted(0);
+                        adapter.notifyItemChanged(1);
                         recyclerView.smoothScrollToPosition(0);
 
                     } else if (data.getClipData() != null) {
@@ -269,6 +279,7 @@ public class ShareMessageActivity extends AppCompatActivity {
                         albumMessage.setImagesListUri(mArrayUri);
                         items.add(0, albumMessage);
                         adapter.notifyItemInserted(0);
+                        adapter.notifyItemChanged(1);
                         recyclerView.smoothScrollToPosition(0);
                     }
 
@@ -325,7 +336,7 @@ public class ShareMessageActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         myAudioRecorder.start();
-        Toast.makeText(ShareMessageActivity.this, "Recording started", Toast.LENGTH_LONG).show();
+        Toast.makeText(TimeLineActivity.this, "Recording started", Toast.LENGTH_LONG).show();
     }
 
     private void stopRecording() {

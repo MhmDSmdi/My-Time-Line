@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.blucode.mhmd.timeline.R;
-import com.blucode.mhmd.timeline.data.UriAddress;
+import com.blucode.mhmd.timeline.data.model.UriAddress;
 import com.blucode.mhmd.timeline.ui.ImagePreviewActivity;
 import com.blucode.mhmd.timeline.util.AppConst;
 import com.bumptech.glide.Glide;

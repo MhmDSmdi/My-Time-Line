@@ -6,15 +6,23 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.blucode.mhmd.timeline.R;
+import com.github.vipulasri.timelineview.TimelineView;
 
 public class ImageMessageViewHolder extends RecyclerView.ViewHolder {
 
     private ImageView img, avatar;
+    public TimelineView mTimelineView;
+    private TimeLineType timeLineType;
 
-    public ImageMessageViewHolder(@NonNull View itemView) {
+    public ImageMessageViewHolder(@NonNull View itemView, int viewType) {
         super(itemView);
         img = itemView.findViewById(R.id.img_image_message_card_drawable);
-        avatar = itemView.findViewById(R.id.img_card_image_message_bullet);
+        mTimelineView = itemView.findViewById(R.id.image_timeline);
+    }
+
+    public void setTimeLineType(TimeLineType timeLineType) {
+        this.timeLineType = timeLineType;
+        mTimelineView.initLine(timeLineType.type);
     }
 
     public ImageView getImg() {

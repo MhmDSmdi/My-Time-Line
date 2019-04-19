@@ -1,4 +1,4 @@
-package com.blucode.mhmd.timeline.data;
+package com.blucode.mhmd.timeline.data.model;
 
 import java.util.Date;
 import java.util.concurrent.TimeUnit;

@@ -7,15 +7,22 @@ import android.widget.ImageView;
 
 import com.blucode.mhmd.timeline.R;
 import com.blucode.mhmd.timeline.adapter.AlbumAdapter;
+import com.github.vipulasri.timelineview.TimelineView;
 
 public class AlbumMessageViewHolder extends RecyclerView.ViewHolder {
     private RecyclerView imagesRecyclerview;
     private ImageView avatar;
-
-    public AlbumMessageViewHolder(@NonNull View itemView) {
+    public TimelineView mTimelineView;
+    private TimeLineType timeLineType;
+    public AlbumMessageViewHolder(@NonNull View itemView, int viewType) {
         super(itemView);
         imagesRecyclerview = itemView.findViewById(R.id.recycler_album_card);
-        avatar = itemView.findViewById(R.id.img_card_album_message_bullet);
+        mTimelineView = itemView.findViewById(R.id.album_timeline);
+    }
+
+    public void setTimeLineType(TimeLineType timeLineType) {
+        this.timeLineType = timeLineType;
+        mTimelineView.initLine(timeLineType.type);
     }
 
     public ImageView getAvatar() {

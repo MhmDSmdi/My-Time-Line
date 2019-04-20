@@ -36,7 +36,6 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ImageViewHol
     @Override
     public void onBindViewHolder(@NonNull ImageViewHolder holder, int position) {
         final Uri imagePath = Uri.parse(imageAddresses.get(position).getAddress());
-//        Glide.with(mContext).load(R.drawable.placeholder).into(holder.drawable);
         Glide.with(mContext).load(imagePath).into(holder.drawable);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

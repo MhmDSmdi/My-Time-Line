@@ -4,6 +4,7 @@ import android.net.Uri;
 
 import io.objectbox.annotation.Entity;
 import io.objectbox.annotation.Id;
+import io.objectbox.relation.ToOne;
 
 @Entity
 public class UriAddress {
@@ -11,6 +12,7 @@ public class UriAddress {
     @Id
     public long id;
     private String address;
+    private ToOne<AlbumMessage> albumMessage;
 
     public UriAddress() {
     }
@@ -37,5 +39,13 @@ public class UriAddress {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public ToOne<AlbumMessage> getAlbumMessage() {
+        return albumMessage;
+    }
+
+    public void setAlbumMessage(ToOne<AlbumMessage> albumMessage) {
+        this.albumMessage = albumMessage;
     }
 }

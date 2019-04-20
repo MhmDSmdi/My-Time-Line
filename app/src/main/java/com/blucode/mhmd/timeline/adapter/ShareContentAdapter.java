@@ -169,7 +169,7 @@ public class ShareContentAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(mContext, ImagePreviewActivity.class);
-                        intent.putExtra(AppConst.EXTRA_IMAGE_URI, imageMessage.getImageAddress().toString());
+                        intent.putExtra(AppConst.EXTRA_IMAGE_URI, imageMessage.getUri().toString());
                         mContext.startActivity(intent);
                     }
                 });
@@ -190,6 +190,7 @@ public class ShareContentAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     imagesRecyclerview.setLayoutManager(new GridLayoutManager(mContext, 3));
                 else if (albumMessage.getImagesListUri().size() % 2 == 0)
                     imagesRecyclerview.setLayoutManager(new GridLayoutManager(mContext, 2));
+                Toast.makeText(mContext, albumMessage.getImagesListUri().size() + "", Toast.LENGTH_LONG).show();
                 AlbumAdapter adapter = new AlbumAdapter(mContext, albumMessage.getImagesListUri());
                 imagesRecyclerview.setAdapter(adapter);
                 break;

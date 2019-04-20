@@ -2,6 +2,7 @@ package com.blucode.mhmd.timeline.data.model;
 
 import java.util.List;
 
+import io.objectbox.annotation.Backlink;
 import io.objectbox.annotation.Entity;
 import io.objectbox.annotation.Id;
 
@@ -10,6 +11,8 @@ public class AlbumMessage extends BasicMessage{
 
     @Id
     public long id;
+
+    @Backlink(to="albumMessage")
     private List<UriAddress> imagesListUri;
 
     public AlbumMessage() {

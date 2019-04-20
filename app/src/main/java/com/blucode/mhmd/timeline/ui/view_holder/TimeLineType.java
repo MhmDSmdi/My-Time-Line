@@ -10,15 +10,14 @@ public enum TimeLineType {
         this.type = type;
     }
 
-    public static TimeLineType getTimeLineViewType(int position, int totalSize) {
-        if(totalSize == 1) {
+    public static TimeLineType getTimelineType(int size, int position) {
+        if (size == 1)
             return TimeLineType.ONLYONE;
-        } else if(position == 0) {
-            return TimeLineType.START;
-        } else if(position == totalSize - 1) {
+        else if (position == size - 1)
             return TimeLineType.END;
-        } else {
+        else if (position  == 0)
+            return TimeLineType.START;
+        else
             return TimeLineType.NORMAL;
-        }
     }
 }

@@ -70,16 +70,11 @@
           "name": "date"
         }
       ],
-      "relations": [
-        {
-          "id": "1:6181449295787762287",
-          "name": "imagesListUri"
-        }
-      ]
+      "relations": []
     },
     {
       "id": "4:7832377999512729685",
-      "lastPropertyId": "2:779148051927069480",
+      "lastPropertyId": "3:2399575052564028875",
       "name": "UriAddress",
       "properties": [
         {
@@ -89,6 +84,11 @@
         {
           "id": "2:779148051927069480",
           "name": "address"
+        },
+        {
+          "id": "3:2399575052564028875",
+          "indexId": "2:4967526451432868228",
+          "name": "albumMessageId"
         }
       ],
       "relations": []
@@ -127,7 +127,7 @@
     }
   ],
   "lastEntityId": "5:6733036867177755339",
-  "lastIndexId": "1:8299829964281359850",
+  "lastIndexId": "2:4967526451432868228",
   "lastRelationId": "1:6181449295787762287",
   "lastSequenceId": "0:0",
   "modelVersion": 4,
@@ -140,6 +140,8 @@
     1307273894012159946,
     6821068672203021984
   ],
-  "retiredRelationUids": [],
+  "retiredRelationUids": [
+    6181449295787762287
+  ],
   "version": 1
 }

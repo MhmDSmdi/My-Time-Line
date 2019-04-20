@@ -14,6 +14,7 @@ public class AlbumMessageViewHolder extends RecyclerView.ViewHolder {
     private ImageView avatar;
     public TimelineView mTimelineView;
     private TimeLineType timeLineType;
+
     public AlbumMessageViewHolder(@NonNull View itemView, int viewType) {
         super(itemView);
         imagesRecyclerview = itemView.findViewById(R.id.recycler_album_card);

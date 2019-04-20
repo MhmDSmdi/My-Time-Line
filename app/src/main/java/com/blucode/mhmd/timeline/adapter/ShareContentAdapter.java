@@ -84,15 +84,7 @@ public class ShareContentAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             case TEXT_MESSAGE:
                 final TextMessage textMessage = (TextMessage) itemList.get(position);
                 TextMessageViewHolder textMessageViewHolder = (TextMessageViewHolder)(holder);
-                textMessageViewHolder.setTimeLineType(TimeLineType.NORMAL);
-                if (itemList.size() == 1)
-                    textMessageViewHolder.setTimeLineType(TimeLineType.ONLYONE);
-                else if (position == itemList.size() - 1)
-                    textMessageViewHolder.setTimeLineType(TimeLineType.END);
-                else if (position  == 0)
-                    textMessageViewHolder.setTimeLineType(TimeLineType.START);
-                else
-                    textMessageViewHolder.setTimeLineType(TimeLineType.NORMAL);
+                textMessageViewHolder.setTimeLineType(TimeLineType.getTimelineType(itemList.size(), position));
                 textMessageViewHolder.getTime().setText(dateFormat.format(textMessage.getDate()));
                 textMessageViewHolder.getBodyMessage().setText(textMessage.getText());
                 holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
@@ -118,14 +110,7 @@ public class ShareContentAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             case VOICE_MESSAGE:
                 final VoiceMessage voiceMessage = (VoiceMessage) itemList.get(position);
                 VoiceMessageViewHolder voiceMessageViewHolder = (VoiceMessageViewHolder) (holder);
-                if (itemList.size() == 1)
-                    voiceMessageViewHolder .setTimeLineType(TimeLineType.ONLYONE);
-                else if (position == itemList.size() - 1)
-                    voiceMessageViewHolder.setTimeLineType(TimeLineType.END);
-                else if (position  == 0)
-                    voiceMessageViewHolder.setTimeLineType(TimeLineType.START);
-                else
-                    voiceMessageViewHolder.setTimeLineType(TimeLineType.NORMAL);
+                voiceMessageViewHolder.setTimeLineType(TimeLineType.getTimelineType(itemList.size(), position));
                 voiceMessageViewHolder.getTime().setText(dateFormat.format(voiceMessage.getDate()));
                 voiceMessageViewHolder.getBody().setText(voiceMessage.getBodyMessage());
                 voiceMessageViewHolder.getDuration().setText(voiceMessage.getDurationFormative());
@@ -156,14 +141,7 @@ public class ShareContentAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             case IMAGE:
                 final ImageMessage imageMessage = (ImageMessage) itemList.get(position);
                 ImageMessageViewHolder imageMessageViewHolder= (ImageMessageViewHolder) (holder);
-                if (itemList.size() == 1)
-                    imageMessageViewHolder .setTimeLineType(TimeLineType.ONLYONE);
-                else if (position == itemList.size() - 1)
-                    imageMessageViewHolder.setTimeLineType(TimeLineType.END);
-                else if (position  == 0)
-                    imageMessageViewHolder.setTimeLineType(TimeLineType.START);
-                else
-                    imageMessageViewHolder.setTimeLineType(TimeLineType.NORMAL);
+                imageMessageViewHolder.setTimeLineType(TimeLineType.getTimelineType(itemList.size(), position));
                 Glide.with(mContext).load(imageMessage.getUri()).into(imageMessageViewHolder.getImg());
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -177,20 +155,12 @@ public class ShareContentAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             case IMAGE_ALBUM:
                 final AlbumMessage albumMessage = (AlbumMessage) itemList.get(position);
                 AlbumMessageViewHolder albumMessageViewHolder= (AlbumMessageViewHolder) (holder);
-                if (itemList.size() == 1)
-                    albumMessageViewHolder .setTimeLineType(TimeLineType.ONLYONE);
-                else if (position == itemList.size() - 1)
-                    albumMessageViewHolder.setTimeLineType(TimeLineType.END);
-                else if (position  == 0)
-                    albumMessageViewHolder.setTimeLineType(TimeLineType.START);
-                else
-                    albumMessageViewHolder.setTimeLineType(TimeLineType.NORMAL);
+                albumMessageViewHolder.setTimeLineType(TimeLineType.getTimelineType(itemList.size(), position));
                 RecyclerView imagesRecyclerview = albumMessageViewHolder.getImagesRecyclerview();
                 if (albumMessage.getImagesListUri().size() / 3 >= 1)
                     imagesRecyclerview.setLayoutManager(new GridLayoutManager(mContext, 3));
                 else if (albumMessage.getImagesListUri().size() % 2 == 0)
                     imagesRecyclerview.setLayoutManager(new GridLayoutManager(mContext, 2));
-                Toast.makeText(mContext, albumMessage.getImagesListUri().size() + "", Toast.LENGTH_LONG).show();
                 AlbumAdapter adapter = new AlbumAdapter(mContext, albumMessage.getImagesListUri());
                 imagesRecyclerview.setAdapter(adapter);
                 break;

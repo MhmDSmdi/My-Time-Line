@@ -1,29 +1,21 @@
 package com.blucode.mhmd.timeline.data.model;
 
-import java.util.List;
-
-import io.objectbox.annotation.Backlink;
 import io.objectbox.annotation.Entity;
 import io.objectbox.annotation.Id;
+import io.objectbox.relation.ToMany;
 
 @Entity
-public class AlbumMessage extends BasicMessage{
+public class AlbumMessage extends BasicMessage {
 
     @Id
     public long id;
-
-    @Backlink(to="albumMessage")
-    private List<UriAddress> imagesListUri;
+    private ToMany<UriAddress> imagesListUri;
 
     public AlbumMessage() {
         messageType = MessageType.ALBUM_MESSAGE;
     }
 
-    public void setImagesListUri(List<UriAddress> imagesListUri) {
-        this.imagesListUri = imagesListUri;
-    }
-
-    public List<UriAddress> getImagesListUri() {
+    public ToMany<UriAddress> getImagesListUri() {
         return imagesListUri;
     }
 

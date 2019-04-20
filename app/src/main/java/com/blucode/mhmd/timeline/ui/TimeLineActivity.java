@@ -287,7 +287,7 @@ public class TimeLineActivity extends AppCompatActivity {
                             mArrayUri.add(new UriAddress(uri));
                         }
                         AlbumMessage albumMessage = new AlbumMessage();
-                        albumMessage.setImagesListUri(mArrayUri);
+                        albumMessage.getImagesListUri().addAll(mArrayUri);
                         items.add(0, albumMessage);
                         adapter.notifyItemInserted(0);
                         adapter.notifyItemChanged(1);

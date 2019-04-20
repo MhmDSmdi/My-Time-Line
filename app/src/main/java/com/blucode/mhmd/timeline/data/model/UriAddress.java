@@ -12,7 +12,6 @@ public class UriAddress {
     @Id
     public long id;
     private String address;
-    private ToOne<AlbumMessage> albumMessage;
 
     public UriAddress() {
     }
@@ -41,11 +40,4 @@ public class UriAddress {
         this.id = id;
     }
 
-    public ToOne<AlbumMessage> getAlbumMessage() {
-        return albumMessage;
-    }
-
-    public void setAlbumMessage(ToOne<AlbumMessage> albumMessage) {
-        this.albumMessage = albumMessage;
-    }
 }

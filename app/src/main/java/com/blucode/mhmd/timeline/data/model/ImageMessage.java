@@ -9,16 +9,19 @@ import io.objectbox.annotation.Id;
 import io.objectbox.relation.ToOne;
 
 @Entity
-public class ImageMessage {
+public class ImageMessage extends BasicMessage {
 
     @Id
     public long id;
     private ToOne<UriAddress> imageAddress;
-    private Date time;
 
-    public ImageMessage(Uri imageAddress, Date time) {
-        this.time = time;
+    public ImageMessage() {
+        messageType = MessageType.IMAGE_MESSAGE;
+    }
+
+    public ImageMessage(Uri imageAddress) {
         this.imageAddress.setTarget(new UriAddress(imageAddress));
+        messageType = MessageType.IMAGE_MESSAGE;
     }
 
     public Uri getUri() {
@@ -45,11 +48,4 @@ public class ImageMessage {
         this.imageAddress.setTarget(new UriAddress(imageAddress));
     }
 
-    public Date getTime() {
-        return time;
-    }
-
-    public void setTime(Date time) {
-        this.time = time;
-    }
 }

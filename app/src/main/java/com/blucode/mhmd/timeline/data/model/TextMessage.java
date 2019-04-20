@@ -6,16 +6,19 @@ import io.objectbox.annotation.Entity;
 import io.objectbox.annotation.Id;
 
 @Entity
-public class TextMessage {
+public class TextMessage extends BasicMessage {
 
     @Id
     public long id;
     private String text;
-    private Date time;
 
-    public TextMessage(String text, Date time) {
+    public TextMessage() {
+        messageType = MessageType.TEXT_MESSAGE;
+    }
+
+    public TextMessage(String text) {
         this.text = text;
-        this.time = time;
+        messageType = MessageType.TEXT_MESSAGE;
     }
 
     public long getId() {
@@ -32,13 +35,5 @@ public class TextMessage {
 
     public void setText(String text) {
         this.text = text;
-    }
-
-    public Date getTime() {
-        return time;
-    }
-
-    public void setTime(Date time) {
-        this.time = time;
     }
 }

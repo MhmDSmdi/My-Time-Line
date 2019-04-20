@@ -5,7 +5,7 @@
   "entities": [
     {
       "id": "1:2141173421341250743",
-      "lastPropertyId": "5:7536906423660810971",
+      "lastPropertyId": "3:1307273894012159946",
       "name": "TextMessage",
       "properties": [
         {
@@ -17,19 +17,15 @@
           "name": "text"
         },
         {
-          "id": "4:1032935483772080517",
-          "name": "messageType"
-        },
-        {
-          "id": "5:7536906423660810971",
-          "name": "date"
+          "id": "3:1307273894012159946",
+          "name": "time"
         }
       ],
       "relations": []
     },
     {
       "id": "2:8206576063930158965",
-      "lastPropertyId": "5:5834395944096463726",
+      "lastPropertyId": "3:867003130200787169",
       "name": "ImageMessage",
       "properties": [
         {
@@ -37,24 +33,20 @@
           "name": "id"
         },
         {
+          "id": "2:6422527134514372602",
+          "name": "time"
+        },
+        {
           "id": "3:867003130200787169",
           "indexId": "1:8299829964281359850",
           "name": "imageAddressId"
-        },
-        {
-          "id": "4:2091143635035581764",
-          "name": "messageType"
-        },
-        {
-          "id": "5:5834395944096463726",
-          "name": "date"
         }
       ],
       "relations": []
     },
     {
       "id": "3:3379592818516244633",
-      "lastPropertyId": "4:8479592237786840970",
+      "lastPropertyId": "2:2639223491158471241",
       "name": "AlbumMessage",
       "properties": [
         {
@@ -62,12 +54,8 @@
           "name": "id"
         },
         {
-          "id": "3:2488293607723400859",
-          "name": "messageType"
-        },
-        {
-          "id": "4:8479592237786840970",
-          "name": "date"
+          "id": "2:2639223491158471241",
+          "name": "time"
         }
       ],
       "relations": [
@@ -95,7 +83,7 @@
     },
     {
       "id": "5:6733036867177755339",
-      "lastPropertyId": "7:1143115356605472173",
+      "lastPropertyId": "5:4015412744269954019",
       "name": "VoiceMessage",
       "properties": [
         {
@@ -107,20 +95,16 @@
           "name": "bodyMessage"
         },
         {
+          "id": "3:6821068672203021984",
+          "name": "time"
+        },
+        {
           "id": "4:8374735929609526641",
           "name": "duration"
         },
         {
           "id": "5:4015412744269954019",
           "name": "path"
-        },
-        {
-          "id": "6:6450251285287982007",
-          "name": "messageType"
-        },
-        {
-          "id": "7:1143115356605472173",
-          "name": "date"
         }
       ],
       "relations": []
@@ -134,12 +118,7 @@
   "modelVersionParserMinimum": 4,
   "retiredEntityUids": [],
   "retiredIndexUids": [],
-  "retiredPropertyUids": [
-    6422527134514372602,
-    2639223491158471241,
-    1307273894012159946,
-    6821068672203021984
-  ],
+  "retiredPropertyUids": [],
   "retiredRelationUids": [],
   "version": 1
 }

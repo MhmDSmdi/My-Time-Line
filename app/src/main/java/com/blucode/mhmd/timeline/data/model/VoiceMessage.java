@@ -7,20 +7,22 @@ import io.objectbox.annotation.Entity;
 import io.objectbox.annotation.Id;
 
 @Entity
-public class VoiceMessage {
+public class VoiceMessage extends BasicMessage{
 
     @Id
     public long id;
-
     private String bodyMessage;
-    private Date time;
     private long duration;
     private String path;
 
-    public VoiceMessage(String bodyMessage, Date time, String path) {
+    public VoiceMessage() {
+        messageType = MessageType.VOICE_MESSAGE;
+    }
+
+    public VoiceMessage(String bodyMessage, String path) {
         this.bodyMessage = bodyMessage;
-        this.time = time;
         this.path = path;
+        messageType = MessageType.VOICE_MESSAGE;
     }
 
     public String getBodyMessage() {
@@ -44,14 +46,6 @@ public class VoiceMessage {
 
     public void setBodyMessage(String bodyMessage) {
         this.bodyMessage = bodyMessage;
-    }
-
-    public Date getTime() {
-        return time;
-    }
-
-    public void setTime(Date time) {
-        this.time = time;
     }
 
     public String getPath() {

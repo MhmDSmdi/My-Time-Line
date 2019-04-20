@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.blucode.mhmd.timeline.R;
 import com.blucode.mhmd.timeline.data.model.AlbumMessage;
+import com.blucode.mhmd.timeline.data.model.BasicMessage;
 import com.blucode.mhmd.timeline.data.model.ImageMessage;
 import com.blucode.mhmd.timeline.data.model.TextMessage;
 import com.blucode.mhmd.timeline.data.model.VoiceMessage;
@@ -35,13 +36,13 @@ import java.util.List;
 
 public class ShareContentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private List<Object> itemList;
+    private List<BasicMessage> itemList;
     private Context mContext;
     private final int TEXT_MESSAGE = 0, VOICE_MESSAGE = 1, DATE = 2, IMAGE = 3, IMAGE_ALBUM = 4;
     private long mVibratePattern[] = new long[]{0, 30};
     private Vibrator vibrator;
 
-    public ShareContentAdapter(Context mContext, List<Object> itemList) {
+    public ShareContentAdapter(Context mContext, List<BasicMessage> itemList) {
         this.itemList = itemList;
         this.mContext = mContext;
         vibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
@@ -92,7 +93,7 @@ public class ShareContentAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     textMessageViewHolder.setTimeLineType(TimeLineType.START);
                 else
                     textMessageViewHolder.setTimeLineType(TimeLineType.NORMAL);
-//                textMessageViewHolder.getTime().setText(dateFormat.format(textMessage.getTime()));
+                textMessageViewHolder.getTime().setText(dateFormat.format(textMessage.getDate()));
                 textMessageViewHolder.getBodyMessage().setText(textMessage.getText());
                 holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
@@ -125,7 +126,7 @@ public class ShareContentAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     voiceMessageViewHolder.setTimeLineType(TimeLineType.START);
                 else
                     voiceMessageViewHolder.setTimeLineType(TimeLineType.NORMAL);
-                voiceMessageViewHolder.getTime().setText(dateFormat.format(voiceMessage.getTime()));
+                voiceMessageViewHolder.getTime().setText(dateFormat.format(voiceMessage.getDate()));
                 voiceMessageViewHolder.getBody().setText(voiceMessage.getBodyMessage());
                 voiceMessageViewHolder.getDuration().setText(voiceMessage.getDurationFormative());
                 voiceMessageViewHolder.getPlay().setOnClickListener(new View.OnClickListener() {

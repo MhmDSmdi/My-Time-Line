@@ -1,5 +1,7 @@
 package com.blucode.mhmd.timeline.data;
 
+import android.util.Log;
+
 import com.blucode.mhmd.timeline.ObjectBox;
 import com.blucode.mhmd.timeline.data.model.AlbumMessage;
 import com.blucode.mhmd.timeline.data.model.ImageMessage;
@@ -11,6 +13,7 @@ import java.util.List;
 import io.objectbox.BoxStore;
 
 public class AppDataManager implements DBHandler {
+
     private BoxStore boxStore;
 
     public AppDataManager() {

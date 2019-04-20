@@ -1,21 +1,19 @@
 package com.blucode.mhmd.timeline.data.model;
 
-import java.util.Date;
 import java.util.List;
 
 import io.objectbox.annotation.Entity;
 import io.objectbox.annotation.Id;
 
 @Entity
-public class AlbumMessage {
+public class AlbumMessage extends BasicMessage{
 
     @Id
     public long id;
-
     private List<UriAddress> imagesListUri;
-    private Date time;
 
     public AlbumMessage() {
+        messageType = MessageType.ALBUM_MESSAGE;
     }
 
     public void setImagesListUri(List<UriAddress> imagesListUri) {
@@ -24,14 +22,6 @@ public class AlbumMessage {
 
     public List<UriAddress> getImagesListUri() {
         return imagesListUri;
-    }
-
-    public Date getTime() {
-        return time;
-    }
-
-    public void setTime(Date time) {
-        this.time = time;
     }
 
     public long getId() {

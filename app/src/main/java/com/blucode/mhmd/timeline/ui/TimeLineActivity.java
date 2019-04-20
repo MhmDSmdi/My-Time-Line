@@ -35,11 +35,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.blucode.mhmd.timeline.ObjectBox;
 import com.blucode.mhmd.timeline.R;
 import com.blucode.mhmd.timeline.adapter.ShareContentAdapter;
 import com.blucode.mhmd.timeline.data.AppDataManager;
 import com.blucode.mhmd.timeline.data.model.AlbumMessage;
+import com.blucode.mhmd.timeline.data.model.BasicMessage;
 import com.blucode.mhmd.timeline.data.model.ImageMessage;
+import com.blucode.mhmd.timeline.data.model.MyObjectBox;
 import com.blucode.mhmd.timeline.data.model.TextMessage;
 import com.blucode.mhmd.timeline.data.model.UriAddress;
 import com.blucode.mhmd.timeline.data.model.VoiceMessage;
@@ -49,6 +52,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -66,7 +70,7 @@ public class TimeLineActivity extends AppCompatActivity {
     private TextView timer;
     private RecyclerView recyclerView;
     private ShareContentAdapter adapter;
-    private List<Object> items;
+    private List<BasicMessage> items;
     private AppDataManager dataManager;
     private long[] mVibratePattern = new long[]{0,30};
     static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -82,13 +86,15 @@ public class TimeLineActivity extends AppCompatActivity {
         panel = findViewById(R.id.layout_share_content_items);
         timer = findViewById(R.id.txt_timer_share_content);
         recyclerView = findViewById(R.id.recycler_sharedContent);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         items = new ArrayList<>();
-        dataManager = new AppDataManager();
-        getPermission();
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new ShareContentAdapter(this, items);
         recyclerView.setAdapter(adapter);
         recyclerView.addOnScrollListener(scrollListener);
+        dataManager = new AppDataManager();
+        fetchCacheMessages();
+        getPermission();
+
         btnCamera = findViewById(R.id.img_home_camera);
         btnVoice = findViewById(R.id.img_home_voice);
         btnAttach = findViewById(R.id.img_home_attach);
@@ -150,12 +156,16 @@ public class TimeLineActivity extends AppCompatActivity {
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TextMessage message = new TextMessage(messageEditText.getText().toString(), new Date());
+                TextMessage message = new TextMessage(messageEditText.getText().toString());
                 items.add(0, message);
                 messageEditText.setText("");
                 adapter.notifyItemInserted(0);
                 adapter.notifyItemChanged(1);
                 recyclerView.smoothScrollToPosition(0);
+                dataManager.insertTextMessage(message);
+
+
+
 //                Intent sendIntent = new Intent();
 //                sendIntent.setAction(Intent.ACTION_SEND);
 //                sendIntent.putExtra(Intent.EXTRA_TEXT, messageEditText.getText().toString().trim());
@@ -192,13 +202,14 @@ public class TimeLineActivity extends AppCompatActivity {
                         messageEditText.setVisibility(View.VISIBLE);
                         timer.setVisibility(View.INVISIBLE);
                         stopRecording();
-                        VoiceMessage voiceMessage = new VoiceMessage(messageEditText.getText().toString(), new Date(), voiceOutputFile);
+                        VoiceMessage voiceMessage = new VoiceMessage(messageEditText.getText().toString(), voiceOutputFile);
                         voiceMessage.setDuration(timerRecording.getTick());
                         items.add(0, voiceMessage);
                         recyclerView.smoothScrollToPosition(0);
                         timerRecording.cancelTimer();
                         adapter.notifyItemInserted(0);
                         adapter.notifyItemChanged(1);
+                        dataManager.insertVoiceMessage(voiceMessage);
                     return true;
                }
                return false;
@@ -249,21 +260,21 @@ public class TimeLineActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case REQUEST_IMAGE_CAPTURE:
-                    ImageMessage imageMessage = new ImageMessage(Uri.fromFile(new File(currentPhotoPath)), null);
+                    ImageMessage imageMessage = new ImageMessage(Uri.fromFile(new File(currentPhotoPath)));
                     items.add(0, imageMessage);
                     recyclerView.smoothScrollToPosition(0);
                     adapter.notifyItemInserted(0);
                     adapter.notifyItemChanged(1);
-
-                    galleryAddPic();
+                    dataManager.insertImageMessage(imageMessage);
                     break;
 
                 case REQUEST_IMAGES_PICKER:
                     String[] filePathColumn = { MediaStore.Images.Media.DATA };
                     List<UriAddress> mArrayUri = new ArrayList<>();
                     if(data.getData()!=null){
-                        ImageMessage singleImageMessage = new ImageMessage(data.getData(), null);
+                        ImageMessage singleImageMessage = new ImageMessage(data.getData());
                         items.add(0, singleImageMessage);
+                        dataManager.insertImageMessage(singleImageMessage);
                         adapter.notifyItemInserted(0);
                         adapter.notifyItemChanged(1);
                         recyclerView.smoothScrollToPosition(0);
@@ -281,6 +292,7 @@ public class TimeLineActivity extends AppCompatActivity {
                         adapter.notifyItemInserted(0);
                         adapter.notifyItemChanged(1);
                         recyclerView.smoothScrollToPosition(0);
+                        dataManager.insertAlbumMessage(albumMessage);
                     }
 
                     break;
@@ -356,5 +368,14 @@ public class TimeLineActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void fetchCacheMessages() {
+        items.addAll(dataManager.getAllAlbumMessage());
+        items.addAll(dataManager.getAllImageMessage());
+        items.addAll(dataManager.getAllTextMessage());
+        items.addAll(dataManager.getAllVoiceMessage());
+        Collections.sort(items, new BasicMessage());
+        adapter.notifyDataSetChanged();
     }
 }

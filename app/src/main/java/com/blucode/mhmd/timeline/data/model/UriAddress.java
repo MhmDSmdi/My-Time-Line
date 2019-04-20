@@ -12,6 +12,9 @@ public class UriAddress {
     public long id;
     private String address;
 
+    public UriAddress() {
+    }
+
     public UriAddress(String address) {
         this.address = address;
     }

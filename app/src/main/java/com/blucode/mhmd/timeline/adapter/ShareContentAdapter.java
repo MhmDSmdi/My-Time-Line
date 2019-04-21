@@ -85,7 +85,6 @@ public class ShareContentAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 final TextMessage textMessage = (TextMessage) itemList.get(position);
                 TextMessageViewHolder textMessageViewHolder = (TextMessageViewHolder)(holder);
                 textMessageViewHolder.setTimeLineType(TimeLineType.getTimelineType(itemList.size(), position));
-                textMessageViewHolder.getTime().setText(dateFormat.format(textMessage.getDate()));
                 textMessageViewHolder.getBodyMessage().setText(textMessage.getText());
                 holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
@@ -111,7 +110,6 @@ public class ShareContentAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 final VoiceMessage voiceMessage = (VoiceMessage) itemList.get(position);
                 VoiceMessageViewHolder voiceMessageViewHolder = (VoiceMessageViewHolder) (holder);
                 voiceMessageViewHolder.setTimeLineType(TimeLineType.getTimelineType(itemList.size(), position));
-                voiceMessageViewHolder.getTime().setText(dateFormat.format(voiceMessage.getDate()));
                 voiceMessageViewHolder.getBody().setText(voiceMessage.getBodyMessage());
                 voiceMessageViewHolder.getDuration().setText(voiceMessage.getDurationFormative());
                 voiceMessageViewHolder.getPlay().setOnClickListener(new View.OnClickListener() {

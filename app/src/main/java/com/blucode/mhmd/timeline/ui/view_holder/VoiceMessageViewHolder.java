@@ -19,7 +19,6 @@ public class VoiceMessageViewHolder extends RecyclerView.ViewHolder {
 
     public VoiceMessageViewHolder(@NonNull View itemView, int viewType) {
         super(itemView);
-        time = itemView.findViewById(R.id.txt_card_messages_voice_time);
         body = itemView.findViewById(R.id.txt_card_messages_voice_body);
         duration = itemView.findViewById(R.id.txt_card_messages_voice_duration);
         play = itemView.findViewById(R.id.btn_card_messages_voice_play);

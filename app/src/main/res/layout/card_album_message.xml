@@ -6,35 +6,43 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:maxWidth="@dimen/size_card_max_width"
-    android:layout_marginLeft="@dimen/margin_message_placeholder">
+
+    android:layout_marginLeft="@dimen/margin_message_placeholder_left"
+    android:layout_marginRight="@dimen/margin_message_placeholder_right">
 
     <com.github.vipulasri.timelineview.TimelineView
         android:id="@+id/album_timeline"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         app:markerSize="20dp"
+        app:marker="@drawable/solid_marker"
         app:lineWidth="2dp"
-        app:lineStyle="dash"
-        app:startLineColor="@color/colorPrimaryDark"
-        app:endLineColor="@color/colorPrimaryDark"/>
+        app:lineStyle="normal"
+        app:startLineColor="@color/timeline_line"
+        app:endLineColor="@color/timeline_line"/>
 
-    <android.support.v7.widget.CardView
+    <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="@dimen/size_card_max_width"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:maxWidth="@dimen/size_card_max_width"
+        android:orientation="vertical"
         android:layout_marginHorizontal="@dimen/margin_avatar_message"
         android:layout_marginVertical="@dimen/margin_messages"
-        app:cardCornerRadius="8dp"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        app:cardBackgroundColor="@color/white">
+        android:background="@color/color_card_back">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_album_card"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="1dp"
-            android:layout_gravity="right"
-            android:background="@color/white"/>
-    </android.support.v7.widget.CardView>
+            android:layout_gravity="left"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/divider"/>
+    </LinearLayout>
 </LinearLayout>

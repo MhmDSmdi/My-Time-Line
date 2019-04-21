@@ -2,8 +2,13 @@
 <resources>
     <color name="colorPrimary">#6595f5</color>
     <color name="colorPrimaryDark">#2B305F</color>
-    <color name="colorAccent">#9B075E</color>
-    <color name="colorBack">#131D6F</color>
+    <color name="colorAccent">#C8C5D6</color>
+    <color name="colorBack">#5E004B</color>
+    <color name="color_card_back">#5E004B</color>
+    <color name="colorDivider">#D5852772</color>
+    <color name="colorCardText">#fff</color>
+    <color name="timeline_marker">#006064</color>
+    <color name="timeline_line">#E1DEE9</color>
     <color name="white">#fff</color>
     <color name="gray">#949393</color>
     <color name="black">#000</color>

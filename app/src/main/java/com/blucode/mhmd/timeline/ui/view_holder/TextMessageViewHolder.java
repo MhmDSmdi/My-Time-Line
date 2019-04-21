@@ -17,7 +17,6 @@ public class TextMessageViewHolder extends RecyclerView.ViewHolder {
     private TimeLineType timeLineType;
     public TextMessageViewHolder(@NonNull View itemView, int viewType) {
         super(itemView);
-        time = itemView.findViewById(R.id.txt_card_messages_text_time);
         bodyMessage = itemView.findViewById(R.id.txt_card_messages_text_body);
         mTimelineView = itemView.findViewById(R.id.text_timeline);
     }

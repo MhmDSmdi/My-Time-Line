@@ -192,6 +192,7 @@ public class ShareContentAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         intent.putExtra(AppConst.EXTRA_MESSAGE_RATING, imageMessage.getRate());
                         intent.putExtra(AppConst.EXTRA_MESSAGE_POSITION, position);
                         intent.putExtra(AppConst.EXTRA_MESSAGE_TYPE, IMAGE);
+                        intent.putExtra(AppConst.EXTRA_MESSAGE_IMAGE_URI, imageMessage.getUri().toString());
                         ((Activity)mContext).startActivityForResult(intent, AppConst.EDIT_REQUEST_CODE);
                         return true;
                     }

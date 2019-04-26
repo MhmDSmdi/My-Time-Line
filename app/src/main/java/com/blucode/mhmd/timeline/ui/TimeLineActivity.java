@@ -90,6 +90,9 @@ public class TimeLineActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_share_content);
+        Intent intent = getIntent();
+        String action = intent.getAction();
+        String type = intent.getType();
         messageEditText = findViewById(R.id.edit_text_home_message);
         timelineEmpty = findViewById(R.id.note_empty);
         panel = findViewById(R.id.layout_share_content_items);
@@ -107,7 +110,6 @@ public class TimeLineActivity extends AppCompatActivity {
         btnCamera = findViewById(R.id.img_home_camera);
         btnVoice = findViewById(R.id.img_home_voice);
         btnAttach = findViewById(R.id.img_home_attach);
-
         btnCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -120,7 +122,6 @@ public class TimeLineActivity extends AppCompatActivity {
                attachPictures();
             }
         });
-
         messageEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -151,19 +152,15 @@ public class TimeLineActivity extends AppCompatActivity {
             public void onClick(View v) {
                 TextMessage message = new TextMessage(messageEditText.getText().toString());
                 addTextMessage(message, 0);
-
             }
         });
-
         timerRecording = new TimerRecording(new Handler() {
             @Override
             public void handleMessage(Message msg) {
                 timer.setText(timerRecording.getTickString());
             }
         });
-
-
-       btnVoice.setOnTouchListener(new View.OnTouchListener() {
+        btnVoice.setOnTouchListener(new View.OnTouchListener() {
            @Override
            public boolean onTouch(View v, MotionEvent event) {
                switch (event.getAction()) {
@@ -189,6 +186,48 @@ public class TimeLineActivity extends AppCompatActivity {
                return false;
            }
        });
+        if (Intent.ACTION_SEND.equals(action) && type != null) {
+            if ("text/plain".equals(type)) {
+                handleSendText(intent);
+            } else if (type.startsWith("image/")) {
+                handleSendImage(intent);
+            }
+        } else if (Intent.ACTION_SEND_MULTIPLE.equals(action) && type != null) {
+            if (type.startsWith("image/")) {
+                handleSendMultipleImages(intent);
+            }
+        }
+    }
+
+    private void handleSendMultipleImages(Intent intent) {
+        ArrayList<Uri> imageUris = intent.getParcelableArrayListExtra(Intent.EXTRA_STREAM);
+        if (imageUris != null) {
+            List<UriAddress> mArrayUri = new ArrayList<>();
+            for (Uri uri : imageUris) {
+                mArrayUri.add(new UriAddress(uri));
+            }
+            AlbumMessage albumMessage = new AlbumMessage();
+            albumMessage.getImagesListUri().addAll(mArrayUri);
+            addAlbumMessage(albumMessage, 0);
+        }
+    }
+
+    private void handleSendImage(Intent intent) {
+        Uri imageUri = (Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM);
+        if (imageUri != null) {
+            ImageMessage imageMessage = new ImageMessage();
+            imageMessage.setImageAddress(imageUri);
+            addImageMessage(imageMessage, 0);
+        }
+    }
+
+    private void handleSendText(Intent intent) {
+        String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
+        if (sharedText != null) {
+            TextMessage message = new TextMessage();
+            message.setText(sharedText);
+            addTextMessage(message, 0);
+        }
     }
 
     @Override
@@ -245,10 +284,12 @@ public class TimeLineActivity extends AppCompatActivity {
                         case 1:
                             TextMessage textMessage = (TextMessage) message;
                             textMessage.setText(newBody);
+                            dataManager.insertTextMessage(textMessage);
                             break;
                         case 3:
                             VoiceMessage voiceMessage = (VoiceMessage) message;
                             voiceMessage.setBodyMessage(newBody);
+                            dataManager.insertVoiceMessage(voiceMessage);
                             break;
                     }
                     break;
@@ -311,7 +352,7 @@ public class TimeLineActivity extends AppCompatActivity {
     }
 
     private void attachPictures() {
-        Intent intent = new Intent();
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.setType("image/*");
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         intent.setAction(Intent.ACTION_GET_CONTENT);

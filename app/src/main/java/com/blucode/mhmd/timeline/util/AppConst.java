@@ -11,4 +11,5 @@ public class AppConst {
 
     public static final int EDIT_REQUEST_CODE = 1002;
 
+    public static final String EXTRA_MESSAGE_IMAGE_URI = "EXTRA_MESSAGE_IMAGE_URI";
 }

@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.blucode.mhmd.timeline.R;
 import com.blucode.mhmd.timeline.util.AppConst;

@@ -1,20 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="8dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white">
+
+        <Button
+            android:id="@+id/btn_edit_dialog_save"
+            android:layout_width="60dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginVertical="8dp"
+            android:textSize="15sp"
+            android:background="@drawable/round_button"
+            android:layout_gravity="right"
+            android:text="@string/btn_dialog_save"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_marginHorizontal="16dp"
             android:layout_marginVertical="8dp">
+
             <TextView
-                android:id="@+id/txt_dialog_title"
+                android:id="@+id/txt_edit_dialog_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
@@ -23,42 +38,59 @@
                 android:textStyle="bold"/>
 
             <TextView
-                android:id="@+id/txt_dialog_date"
+                android:id="@+id/txt_edit_dialog_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
                 android:text="21 Apr 2018"
                 android:alpha="0.8"
-                android:layout_marginTop="2dp"
+                android:layout_marginTop="1dp"
                 android:layout_gravity="left"
                 android:textColor="@color/colorPrimaryDark"/>
 
             <EditText
-                android:id="@+id/txt_dialog_message_body"
+                android:id="@+id/txt_edit_dialog_message_body"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
-                android:backgroundTint="@color/colorPrimaryDark"
                 android:text="Are you sure delete this message?"
-                android:drawableLeft="@drawable/ic_note"
-                android:drawablePadding="1dp"
+                android:inputType="textMultiLine"
+                android:textCursorDrawable="@null"
                 android:textColor="@color/colorPrimaryDark"
                 android:textStyle="normal"
+                android:visibility="gone"
                 android:alpha="0.8"
-                android:layout_marginTop="8dp"/>
+                android:layout_marginVertical="8dp"/>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/card_edit_dialog_image"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/height_image_message"
+                android:visibility="gone"
+                android:layout_marginVertical="8dp"
+                android:layout_gravity="center"
+                app:cardCornerRadius="8dp">
+                <ImageView
+                    android:id="@+id/img_edit_dialog_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_launcher_background"/>
+            </android.support.v7.widget.CardView>
 
           <RelativeLayout
-              android:layout_width="match_parent"
+              android:layout_width="wrap_content"
               android:layout_height="wrap_content"
+              android:layout_marginHorizontal="12dp"
               android:layout_gravity="center">
 
               <RatingBar
-                  android:id="@+id/rating_dialog_message"
+                  android:id="@+id/rating_edit_dialog_message"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:layout_marginTop="4dp"
-                  android:tooltipText="sadad"
                   android:layout_alignParentLeft="true"
+                  android:layout_centerVertical="true"
                   android:isIndicator="false"
                   android:theme="@style/RatingBar"
                   android:stepSize="0.2"
@@ -67,36 +99,20 @@
                   style="?android:attr/ratingBarStyleIndicator"/>
 
               <TextView
-                  android:id="@+id/txt_dialog_rate"
+                  android:id="@+id/txt_edit_dialog_rate"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
-                  android:textSize="17sp"
+                  android:textSize="15sp"
                   android:text="Rate : 5"
                   android:layout_alignParentRight="true"
-                  android:alpha="1"
+                  android:layout_centerVertical="true"
+                  android:alpha="0.8"
+                  android:layout_marginTop="4dp"
+                  android:textStyle="italic"
                   android:layout_gravity="center_vertical"
-                  android:layout_marginTop="2dp"
                   android:textColor="@color/colorPrimaryDark"/>
 
           </RelativeLayout>
-
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="16dp"
-                android:layout_gravity="right">
-                <Button
-                    android:id="@+id/btn_dialog_save"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@color/colorPrimary"
-                    android:clickable="true"
-                    style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
-                    android:layout_gravity="center"
-                    android:text="@string/btn_dialog_save"/>
-            </LinearLayout>
 
         </LinearLayout>
 

@@ -6,7 +6,8 @@
     <dimen name="width_image_album_message">85dp</dimen>
     <dimen name="height_image_album_message">100dp</dimen>
 
-    <dimen name="size_card_max_width">255dp</dimen>
+    <dimen name="size_card_max_width_image">225dp</dimen>
+    <dimen name="size_card_max_width_text">255dp</dimen>
 
     <dimen name="margin_message_placeholder_left">16dp</dimen>
     <dimen name="margin_message_placeholder_right">16dp</dimen>

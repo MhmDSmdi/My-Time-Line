@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:maxWidth="@dimen/size_card_max_width"
+    android:maxWidth="@dimen/size_card_max_width_image"
     android:orientation="horizontal"
     android:layout_marginLeft="@dimen/margin_message_placeholder_left"
     android:layout_marginRight="@dimen/margin_message_placeholder_right">
@@ -31,13 +31,13 @@
         android:background="@color/color_card_back">
 
         <android.support.v7.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/height_image_message"
-            android:layout_gravity="center"
+            android:layout_width="@dimen/size_card_max_width_image"
+            android:layout_height="@dimen/size_card_max_width_image"
+            android:layout_gravity="left"
             app:cardCornerRadius="8dp"
             android:layout_margin="4dp">
             <ImageView
-                android:id="@+id/img_image_message_card_drawable"
+                android:id="@+id/img_edit_dialog_image"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"

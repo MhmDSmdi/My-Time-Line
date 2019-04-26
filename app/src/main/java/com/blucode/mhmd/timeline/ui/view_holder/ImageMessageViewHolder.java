@@ -22,7 +22,7 @@ public class ImageMessageViewHolder extends RecyclerView.ViewHolder {
 
     public ImageMessageViewHolder(@NonNull View itemView, int viewType) {
         super(itemView);
-        img = itemView.findViewById(R.id.img_image_message_card_drawable);
+        img = itemView.findViewById(R.id.img_edit_dialog_image);
         mTimelineView = itemView.findViewById(R.id.image_timeline);
         ratingBar = itemView.findViewById(R.id.rating_image_message);
         date = itemView.findViewById(R.id.txt_card_messages_image_date);

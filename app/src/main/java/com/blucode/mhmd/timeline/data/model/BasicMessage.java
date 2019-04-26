@@ -58,32 +58,32 @@ public class BasicMessage implements Comparator<BasicMessage> {
     public void setExpanded(boolean expanded) {
         isExpanded = expanded;
     }
+
+    public enum MessageType{
+        IMAGE_MESSAGE(0),
+        TEXT_MESSAGE(1),
+        ALBUM_MESSAGE(2),
+        VOICE_MESSAGE(3);
+
+        private int messageType;
+        MessageType(int type) {
+            this.messageType = type;
+        }
+        public int getMessageType() {
+            return messageType;
+        }
+    }
 }
 
-enum MessageType{
-    IMAGE_MESSAGE(0),
-    TEXT_MESSAGE(1),
-    ALBUM_MESSAGE(2),
-    VOICE_MESSAGE(3);
-
-    private int messageType;
-    MessageType(int type) {
-        this.messageType = type;
-    }
-    public int getMessageType() {
-        return messageType;
-    }
-}
-
-class MessageTypeConverter implements PropertyConverter<MessageType, String> {
+class MessageTypeConverter implements PropertyConverter<BasicMessage.MessageType, String> {
 
     @Override
-    public MessageType convertToEntityProperty(String databaseValue) {
-        return MessageType.valueOf(databaseValue);
+    public BasicMessage.MessageType convertToEntityProperty(String databaseValue) {
+        return BasicMessage.MessageType.valueOf(databaseValue);
     }
 
     @Override
-    public String convertToDatabaseValue(MessageType entityProperty) {
+    public String convertToDatabaseValue(BasicMessage.MessageType entityProperty) {
         return entityProperty.name();
     }
 }

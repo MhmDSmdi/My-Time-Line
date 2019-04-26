@@ -14,6 +14,9 @@ public class BasicMessage implements Comparator<BasicMessage> {
     @Convert(converter = MessageTypeConverter.class, dbType = String.class)
     protected MessageType messageType;
     protected Date date;
+    protected boolean isExpanded = false;
+    protected float rate;
+
 
     public BasicMessage() {
         date = new Date();
@@ -35,9 +38,25 @@ public class BasicMessage implements Comparator<BasicMessage> {
         this.date = date;
     }
 
+    public float getRate() {
+        return rate;
+    }
+
+    public void setRate(float rate) {
+        this.rate = rate;
+    }
+
     @Override
     public int compare(BasicMessage o1, BasicMessage o2) {
         return (int) (o2.date.getTime() - o1.date.getTime());
+    }
+
+    public boolean isExpanded() {
+        return isExpanded;
+    }
+
+    public void setExpanded(boolean expanded) {
+        isExpanded = expanded;
     }
 }
 

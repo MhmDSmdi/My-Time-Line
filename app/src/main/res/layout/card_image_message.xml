@@ -2,7 +2,7 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/height_image_message"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:maxWidth="@dimen/size_card_max_width"
     android:orientation="horizontal"
@@ -23,7 +23,7 @@
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/height_image_message"
+        android:layout_height="match_parent"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:orientation="vertical"
         android:layout_marginHorizontal="@dimen/margin_avatar_message"
@@ -32,7 +32,7 @@
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="@dimen/height_image_message"
             android:layout_gravity="center"
             app:cardCornerRadius="8dp"
             android:layout_margin="4dp">
@@ -43,6 +43,39 @@
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_launcher_background"/>
         </android.support.v7.widget.CardView>
+
+        <RelativeLayout
+            android:id="@+id/layout_details_image_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_marginBottom="4dp">
+
+            <RatingBar
+                android:id="@+id/rating_image_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="16dp"
+                android:stepSize="0.2"
+                android:numStars="3"
+                android:rating="2"
+                style="?android:attr/ratingBarStyleSmall"/>
+
+            <TextView
+                android:id="@+id/txt_card_messages_image_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="8dp"
+                android:textSize="12sp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:alpha="0.8"
+                android:text="12 APREL"
+                android:textColor="@color/colorCardText"/>
+
+        </RelativeLayout>
 
         <View
             android:layout_width="match_parent"

@@ -12,7 +12,7 @@
     <dimen name="margin_message_placeholder_right">16dp</dimen>
     <dimen name="margin_avatar_message">6dp</dimen>
     <dimen name="margin_messages">4dp</dimen>
-    <dimen name="height_voice_message">85dp</dimen>
+    <dimen name="height_voice_message">105dp</dimen>
 
 
 </resources>

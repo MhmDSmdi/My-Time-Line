@@ -1,6 +1,5 @@
 package com.blucode.mhmd.timeline.data.model;
 
-import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import io.objectbox.annotation.Entity;
@@ -14,6 +13,7 @@ public class VoiceMessage extends BasicMessage{
     private String bodyMessage;
     private long duration;
     private String path;
+    private boolean isPlay = false;
 
     public VoiceMessage() {
         messageType = MessageType.VOICE_MESSAGE;
@@ -42,6 +42,14 @@ public class VoiceMessage extends BasicMessage{
                 TimeUnit.MILLISECONDS.toSeconds(duration) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(duration)),
                 (TimeUnit.MILLISECONDS.toMillis(duration) - TimeUnit.SECONDS.toMillis(TimeUnit.MILLISECONDS.toSeconds(duration))) / 100);
         return durationFormative;
+    }
+
+    public boolean isPlay() {
+        return isPlay;
+    }
+
+    public void setPlay(boolean play) {
+        isPlay = play;
     }
 
     public void setBodyMessage(String bodyMessage) {

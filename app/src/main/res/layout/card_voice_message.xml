@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/height_voice_message"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:maxWidth="@dimen/size_card_max_width"
@@ -23,58 +23,100 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:orientation="vertical"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_marginHorizontal="@dimen/margin_avatar_message"
         android:layout_marginVertical="@dimen/margin_messages"
         android:background="@color/color_card_back">
 
         <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
             <TextView
                 android:id="@+id/txt_card_messages_voice_body"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:maxWidth="@dimen/size_card_max_width"
                 android:textSize="16sp"
-                android:maxLines="2"
+                android:layout_margin="8dp"
                 android:ellipsize="end"
-                android:layout_marginLeft="6dp"
-                android:layout_marginRight="2dp"
-                android:text="This message is body for text"
+                android:maxLines="10"
+                android:text="This message contain some words in this View"
                 android:textColor="@color/colorCardText"/>
+
+            <LinearLayout
+                android:id="@+id/play_panel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="4dp"
+                android:orientation="vertical">
+
+                <com.ohoussein.playpause.PlayPauseView
+                    android:id="@+id/btn_card_messages_voice_play"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:clickable="true"
+                    android:layout_gravity="center_horizontal"
+                    android:foreground="?android:selectableItemBackground"
+                    app:fill_color="#e1e1e1"
+                    app:pause_bg="@color/colorPrimary"
+                    app:play_bg="@color/timeline_marker" />
+
+                <TextView
+                    android:id="@+id/txt_card_messages_voice_duration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:layout_marginTop="4dp"
+                    android:layout_gravity="center_horizontal"
+                    android:text="2:10"
+                    android:alpha="0.6"
+                    android:textColor="@color/colorCardText"/>
+            </LinearLayout>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/layout_details_voice_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="4dp">
+
+            <RatingBar
+                android:id="@+id/rating_voice_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="16dp"
+                android:stepSize="0.2"
+                android:numStars="3"
+                android:rating="2"
+                style="?android:attr/ratingBarStyleSmall"/>
 
             <TextView
-                android:id="@+id/txt_card_messages_voice_duration"
+                android:id="@+id/txt_card_messages_voice_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:layout_marginTop="4dp"
-                android:layout_alignBaseline="@id/txt_card_messages_voice_body"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="6dp"
-                android:text="2:10"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="8dp"
+                android:textSize="12sp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:alpha="0.8"
+                android:text="12 APREL"
                 android:textColor="@color/colorCardText"/>
 
-            <Button
-                android:id="@+id/btn_card_messages_voice_play"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:layout_marginBottom="4dp"
-                android:layout_below="@id/txt_card_messages_voice_body"
-                android:text="play"
-                android:background="@color/colorPrimary"
-                android:layout_centerHorizontal="true"/>
-
         </RelativeLayout>
+
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginTop="1dp"
-            android:layout_gravity="center_horizontal"
+            android:layout_alignParentBottom="true"
             android:background="@drawable/divider"/>
 
     </LinearLayout>

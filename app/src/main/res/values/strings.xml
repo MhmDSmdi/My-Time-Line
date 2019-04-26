@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">My Time Line</string>
+    <string name="btn_dialog_save">Save</string>
 </resources>

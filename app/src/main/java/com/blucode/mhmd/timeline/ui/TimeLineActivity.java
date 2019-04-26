@@ -1,6 +1,8 @@
 package com.blucode.mhmd.timeline.ui;
 
 import android.Manifest;
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
@@ -36,6 +38,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.blucode.mhmd.timeline.App;
 import com.blucode.mhmd.timeline.ObjectBox;
 import com.blucode.mhmd.timeline.R;
 import com.blucode.mhmd.timeline.adapter.ShareContentAdapter;
@@ -47,6 +50,7 @@ import com.blucode.mhmd.timeline.data.model.MyObjectBox;
 import com.blucode.mhmd.timeline.data.model.TextMessage;
 import com.blucode.mhmd.timeline.data.model.UriAddress;
 import com.blucode.mhmd.timeline.data.model.VoiceMessage;
+import com.blucode.mhmd.timeline.util.AppConst;
 import com.blucode.mhmd.timeline.util.TimerRecording;
 
 import java.io.File;
@@ -57,6 +61,8 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import static com.blucode.mhmd.timeline.util.AppConst.EDIT_REQUEST_CODE;
+
 public class TimeLineActivity extends AppCompatActivity {
 
     private static final int MY_PERMISSIONS_REQUEST = 720;
@@ -64,11 +70,12 @@ public class TimeLineActivity extends AppCompatActivity {
     private EditText messageEditText;
     private MediaRecorder myAudioRecorder;
     private String voiceOutputFile;
-    private LinearLayout panel;
+    private LinearLayout panel, timelineEmpty;
     private String currentPhotoPath;
     private Animation mScaleAnimation;
     private TimerRecording timerRecording;
     private TextView timer;
+
     private RecyclerView recyclerView;
     private ShareContentAdapter adapter;
     private List<BasicMessage> items;
@@ -84,6 +91,7 @@ public class TimeLineActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_share_content);
         messageEditText = findViewById(R.id.edit_text_home_message);
+        timelineEmpty = findViewById(R.id.note_empty);
         panel = findViewById(R.id.layout_share_content_items);
         timer = findViewById(R.id.txt_timer_share_content);
         recyclerView = findViewById(R.id.recycler_sharedContent);
@@ -91,11 +99,11 @@ public class TimeLineActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new ShareContentAdapter(this, items);
         recyclerView.setAdapter(adapter);
-        recyclerView.addOnScrollListener(scrollListener);
         dataManager = new AppDataManager();
         fetchCacheMessages();
+        if (items.size() == 0)
+            timelineEmpty.setVisibility(View.VISIBLE);
         getPermission();
-
         btnCamera = findViewById(R.id.img_home_camera);
         btnVoice = findViewById(R.id.img_home_voice);
         btnAttach = findViewById(R.id.img_home_attach);
@@ -103,29 +111,13 @@ public class TimeLineActivity extends AppCompatActivity {
         btnCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-                    File photoFile = null;
-                    try {
-                        photoFile = createImageFile();
-                    } catch (IOException ignored) {
-                    }
-                    if (photoFile != null) {
-                        Uri photoURI = FileProvider.getUriForFile(TimeLineActivity.this, "com.mhmd.android.fileprovider", photoFile);
-                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                    }
-                }
-                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+               takePictureCamera();
             }
         });
         btnAttach.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent,"Select Picture"), REQUEST_IMAGES_PICKER);
+               attachPictures();
             }
         });
 
@@ -158,23 +150,8 @@ public class TimeLineActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 TextMessage message = new TextMessage(messageEditText.getText().toString());
-                items.add(0, message);
-                messageEditText.setText("");
-                adapter.notifyItemInserted(0);
-                adapter.notifyItemChanged(1);
-                recyclerView.smoothScrollToPosition(0);
-                dataManager.insertTextMessage(message);
+                addTextMessage(message, 0);
 
-
-
-//                Intent sendIntent = new Intent();
-//                sendIntent.setAction(Intent.ACTION_SEND);
-//                sendIntent.putExtra(Intent.EXTRA_TEXT, messageEditText.getText().toString().trim());
-//                sendIntent.setType("text/plain");
-//                // Verify that the intent will resolve to an activity
-//                if (sendIntent.resolveActivity(getPackageManager()) != null) {
-//                    startActivity(sendIntent);
-//                }
             }
         });
 
@@ -205,12 +182,8 @@ public class TimeLineActivity extends AppCompatActivity {
                         stopRecording();
                         VoiceMessage voiceMessage = new VoiceMessage(messageEditText.getText().toString(), voiceOutputFile);
                         voiceMessage.setDuration(timerRecording.getTick());
-                        items.add(0, voiceMessage);
-                        recyclerView.smoothScrollToPosition(0);
-                        timerRecording.cancelTimer();
-                        adapter.notifyItemInserted(0);
-                        adapter.notifyItemChanged(1);
-                        dataManager.insertVoiceMessage(voiceMessage);
+                        voiceMessage.setBodyMessage(voiceOutputFile);
+                        addVoiceMessage(voiceMessage, 0);
                     return true;
                }
                return false;
@@ -218,41 +191,15 @@ public class TimeLineActivity extends AppCompatActivity {
        });
     }
 
-
-    RecyclerView.OnScrollListener scrollListener = new RecyclerView.OnScrollListener() {
-        @Override
-        public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-            super.onScrollStateChanged(recyclerView, newState);
-        }
-
-        @Override
-        public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-            Log.d("TEEST", "dx= " + String.valueOf(dx));
-            Log.d("TEEST", "dy= " + String.valueOf(dy));
-            super.onScrolled(recyclerView, dx, dy);
-        }
-    };
-
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
             case MY_PERMISSIONS_REQUEST: {
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                } else {
+                if (grantResults.length > 0 && grantResults[0] != PackageManager.PERMISSION_GRANTED)
                     btnVoice.setEnabled(false);
-                }
                 return;
             }
 
-        }
-    }
-
-    private void getPermission() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED
-                || ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
-                || ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO, Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST);
         }
     }
 
@@ -262,11 +209,7 @@ public class TimeLineActivity extends AppCompatActivity {
             switch (requestCode) {
                 case REQUEST_IMAGE_CAPTURE:
                     ImageMessage imageMessage = new ImageMessage(Uri.fromFile(new File(currentPhotoPath)));
-                    items.add(0, imageMessage);
-                    recyclerView.smoothScrollToPosition(0);
-                    adapter.notifyItemInserted(0);
-                    adapter.notifyItemChanged(1);
-                    dataManager.insertImageMessage(imageMessage);
+                    addImageMessage(imageMessage, 0);
                     break;
 
                 case REQUEST_IMAGES_PICKER:
@@ -274,11 +217,7 @@ public class TimeLineActivity extends AppCompatActivity {
                     List<UriAddress> mArrayUri = new ArrayList<>();
                     if(data.getData()!=null){
                         ImageMessage singleImageMessage = new ImageMessage(data.getData());
-                        items.add(0, singleImageMessage);
-                        dataManager.insertImageMessage(singleImageMessage);
-                        adapter.notifyItemInserted(0);
-                        adapter.notifyItemChanged(1);
-                        recyclerView.smoothScrollToPosition(0);
+                        addImageMessage(singleImageMessage, 0);
 
                     } else if (data.getClipData() != null) {
                         ClipData mClipData = data.getClipData();
@@ -289,15 +228,101 @@ public class TimeLineActivity extends AppCompatActivity {
                         }
                         AlbumMessage albumMessage = new AlbumMessage();
                         albumMessage.getImagesListUri().addAll(mArrayUri);
-                        items.add(0, albumMessage);
-                        adapter.notifyItemInserted(0);
-                        adapter.notifyItemChanged(1);
-                        recyclerView.smoothScrollToPosition(0);
-                        dataManager.insertAlbumMessage(albumMessage);
+                        addAlbumMessage(albumMessage, 0);
                     }
 
                     break;
+                case EDIT_REQUEST_CODE:
+                    int pos = data.getIntExtra(AppConst.EXTRA_MESSAGE_POSITION, 0);
+                    int type = data.getIntExtra(AppConst.EXTRA_MESSAGE_TYPE, 0);
+                    String newBody = data.getStringExtra(AppConst.EXTRA_MESSAGE_BODY);
+                    float newRate = data.getFloatExtra(AppConst.EXTRA_MESSAGE_RATING, 0);
+                    BasicMessage message = items.get(pos);
+                    message.setRate(newRate);
+                    Toast.makeText(this, pos + "", Toast.LENGTH_LONG).show();
+                    adapter.notifyItemChanged(pos);
+                    switch (type) {
+                        case 1:
+                            TextMessage textMessage = (TextMessage) message;
+                            textMessage.setText(newBody);
+                            break;
+                        case 3:
+                            VoiceMessage voiceMessage = (VoiceMessage) message;
+                            voiceMessage.setBodyMessage(newBody);
+                            break;
+                    }
+                    break;
             }
+        }
+    }
+
+    private void addAlbumMessage(AlbumMessage albumMessage, int position) {
+        items.add(position, albumMessage);
+        adapter.notifyItemInserted(position);
+        adapter.notifyItemChanged(position + 1);
+        recyclerView.smoothScrollToPosition(position);
+        dataManager.insertAlbumMessage(albumMessage);
+        emptyLayoutGone();
+    }
+
+    private void addImageMessage(ImageMessage imageMessage, int position) {
+        items.add(position, imageMessage);
+        recyclerView.smoothScrollToPosition(position);
+        adapter.notifyItemInserted(position);
+        adapter.notifyItemChanged(position + 1);
+        dataManager.insertImageMessage(imageMessage);
+        emptyLayoutGone();
+    }
+
+    private void addVoiceMessage(VoiceMessage voiceMessage, int position) {
+        items.add(position, voiceMessage);
+        recyclerView.smoothScrollToPosition(position);
+        timerRecording.cancelTimer();
+        adapter.notifyItemInserted(position);
+        adapter.notifyItemChanged(position + 1);
+        dataManager.insertVoiceMessage(voiceMessage);
+        emptyLayoutGone();
+    }
+
+    private void addTextMessage(TextMessage message, int position) {
+        items.add(position, message);
+        messageEditText.setText("");
+        adapter.notifyItemInserted(position);
+        adapter.notifyItemChanged(position + 1);
+        recyclerView.smoothScrollToPosition(position);
+        dataManager.insertTextMessage(message);
+        emptyLayoutGone();
+    }
+
+    private void takePictureCamera() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ignored) {
+            }
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(TimeLineActivity.this, "com.mhmd.android.fileprovider", photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+            }
+        }
+        startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+    }
+
+    private void attachPictures() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent,"Select Picture"), REQUEST_IMAGES_PICKER);
+    }
+
+    private void getPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO, Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST);
         }
     }
 
@@ -378,5 +403,46 @@ public class TimeLineActivity extends AppCompatActivity {
         items.addAll(dataManager.getAllVoiceMessage());
         Collections.sort(items, new BasicMessage());
         adapter.notifyDataSetChanged();
+    }
+
+    private void emptyLayoutGone() {
+        if (items.size() > 0)
+            timelineEmpty.animate()
+                    .scaleX(0)
+                    .scaleY(0)
+                    .alpha(0.0f)
+                    .setDuration(500)
+                    .setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            super.onAnimationEnd(animation);
+                            timelineEmpty.setVisibility(View.GONE);
+                        }
+                    });
+    }
+
+    private void emptyLayoutVisible() {
+        if (items.size() == 0)
+            timelineEmpty.animate()
+                    .scaleX(timelineEmpty.getScaleX())
+                    .scaleY(timelineEmpty.getScaleY())
+                    .alpha(1.0f)
+                    .setDuration(500)
+                    .setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            super.onAnimationEnd(animation);
+                            timelineEmpty.setVisibility(View.VISIBLE);
+                        }
+                    });
+    }
+
+    private void shareTextMessage() {
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, messageEditText.getText().toString().trim());
+        sendIntent.setType("text/plain");
+        if (sendIntent.resolveActivity(getPackageManager()) != null)
+            startActivity(sendIntent);
     }
 }

@@ -1,21 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBack">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_sharedContent"
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_above="@id/share_nav"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/share_nav"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="2dp"
-        android:layout_marginBottom="1dp"
-        tools:listitem="@layout/card_image_message"
-        android:layout_alignParentEnd="true" />
+        android:background="@color/colorBack">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_sharedContent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="1dp"
+            tools:listitem="@layout/card_image_message"
+            android:layout_alignParentEnd="true" />
+
+       <LinearLayout
+           android:id="@+id/note_empty"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:orientation="vertical"
+           android:visibility="invisible"
+           android:layout_centerVertical="true"
+           android:layout_centerHorizontal="true">
+
+           <ImageView
+               android:layout_width="100dp"
+               android:layout_height="100dp"
+               android:layout_above="@+id/note_empty"
+               android:layout_gravity="center"
+               android:src="@drawable/ic_note"
+               android:tint="@color/white" />
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:textSize="18sp"
+               android:textColor="@color/white"
+               android:alpha="0.8"
+               android:layout_gravity="center"
+               android:text="No notes added yet"/>
+       </LinearLayout>
+
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/share_nav"
@@ -105,5 +139,4 @@
         </LinearLayout>
 
     </RelativeLayout>
-
 </RelativeLayout>
